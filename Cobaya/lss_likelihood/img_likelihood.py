@@ -5,11 +5,14 @@ from cobaya.theory        import Theory
 from cobaya.likelihood    import Likelihood
 from scipy.interpolate    import InterpolatedUnivariateSpline as Spline
 #
+from predict_cl import LinearPowerSpectra
+from predict_cl import LPTPowerSpectra
+from predict_cl import RedshiftDistribution
+from predict_cl import FlatSkyCl
 
 
 # Class for angular power spectrum likelihood.
 class FullShapeLikelihood(Likelihood):
-    zfid:      float
     Omfid:     float
     #
     basedir:   str
@@ -55,8 +58,9 @@ class FullShapeLikelihood(Likelihood):
         """
         Loads the required data.
         """
-        # First load dN/dz.
-        self.dndz = np.loadtxt(self.basedir+self.fs_dnzfn)
+        # First load dN/dz and generate a class from it.
+        dndz = np.loadtxt(self.basedir+self.fs_dnzfn)
+        self.dndz = RedshiftDistribution(self.Omfid,dndz)
         # Then load the data
         cl_dat    = np.loadtxt(self.basedir+self.fs_datfn)
         self.ells = cl_dat[:,0]
