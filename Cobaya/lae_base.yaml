@@ -8,6 +8,7 @@ likelihood:
     fs_datfn:      data/lae_base.cls
     fs_covfn:      data/lae_base.cov
     fs_winfn:      data/lae_base.wla
+    fs_dnzfn:      data/lae_base.dndz
     pklin_fn:      pk_linear.txt
     fs_lmin:       100
     fs_lmax:       500
