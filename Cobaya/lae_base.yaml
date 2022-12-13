@@ -4,6 +4,7 @@ likelihood:
   img_likelihood.FullShapeLikelihood:
     basedir:       /pscratch/sd/m/mwhite/DESI/AnalyzeLAE/Cobaya/
     zfid:          3.00
+    Omfid:         0.31 # Should match assumption in params.
     fs_datfn:      data/lae_base.cls
     fs_covfn:      data/lae_base.cov
     fs_winfn:      data/lae_base.wla
