@@ -58,9 +58,8 @@ class FullShapeLikelihood(Likelihood):
         """
         Loads the required data.
         """
-        # First load dN/dz and generate a class from it.
-        dndz = np.loadtxt(self.basedir+self.fs_dnzfn)
-        self.dndz = RedshiftDistribution(self.Omfid,dndz)
+        # First load dN/dz.
+        self.dndz = np.loadtxt(self.basedir+self.fs_dnzfn)
         # Then load the data
         cl_dat    = np.loadtxt(self.basedir+self.fs_datfn)
         self.ells = cl_dat[:,0]
