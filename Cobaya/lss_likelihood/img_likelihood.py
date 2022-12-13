@@ -5,9 +5,6 @@ from cobaya.theory        import Theory
 from cobaya.likelihood    import Likelihood
 from scipy.interpolate    import InterpolatedUnivariateSpline as Spline
 #
-from predict_cl import LinearPowerSpectra
-from predict_cl import LPTPowerSpectra
-from predict_cl import RedshiftDistribution
 from predict_cl import FlatSkyCl
 
 
@@ -27,11 +24,10 @@ class FullShapeLikelihood(Likelihood):
     #
     def initialize(self):
         """Sets up the class."""
-        # Set up the power spectrum class.
-        plin = np.loadtxt(self.pklin_fn)
-        self.pofk = LinearPowerSpectra(plin[:,0],plin[:,1])
-        # and load the data, covariance, window functions, etc.
+        # Load the data, covariance, window functions, etc.
         self.loadData()
+        # Set up the angular power spectrum class.
+        self.aps = FlatSkyCl(self.Omfid,self.plin,self.dndz)
         #
     def get_requirements(self):
         # We will be working at fixed cosmology.
@@ -60,6 +56,8 @@ class FullShapeLikelihood(Likelihood):
         """
         # First load dN/dz.
         self.dndz = np.loadtxt(self.basedir+self.fs_dnzfn)
+        # Read the z=0 linear theory power spectrum.
+        self.plin = np.loadtxt(self.basedir+self.pklin_fn)
         # Then load the data
         cl_dat    = np.loadtxt(self.basedir+self.fs_datfn)
         self.ells = cl_dat[:,0]
@@ -91,8 +89,12 @@ class FullShapeLikelihood(Likelihood):
         alp2 = pp.get_param('alpha2')
         sn0  = pp.get_param('SN0')
         sn2  = pp.get_param('SN2')
-        #
-        tt   = np.zeros_like(self.ells)
+        # The ell values at which to generate the theory.
+        ell  = np.arange(25.0,self.fs_lmax+1,25.0)
+        pars = [b1,1.0,sn0]
+        tt   = self.aps(ell,pars)
+        # Now fill in the full curve from 0..lmax_window:
+        tt   = Spline(ell,tt,ext='zeros')(np.arange(self.wla.shape[1]))
         return(tt)
         #
     def cl_observe(self,tt):
