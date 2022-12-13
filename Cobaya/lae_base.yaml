@@ -1,0 +1,113 @@
+# YAML file for angular power spectrum fits.
+#
+likelihood:
+  img_likelihood.FullShapeLikelihood:
+    basedir:       /pscratch/sd/m/mwhite/DESI/AnalyzeLAE/Cobaya/
+    zfid:          3.00
+    fs_datfn:      data/lae_base.cls
+    fs_covfn:      data/lae_base.cov
+    fs_winfn:      data/lae_base.wla
+    fs_lmin:       100
+    fs_lmax:       500
+    stop_at_error: True
+
+params:
+  H0:
+    value: 68.0
+    latex: H_0
+  omegam:
+    value: 0.31
+    latex: \Omega_\mathrm{m}
+  logA:
+    value: 3.036394
+    latex: \log(10^{10} A_\mathrm{s})
+  sigma8:
+    latex: \sigma_8
+    
+  b1:
+    prior:
+      dist: uniform
+      min:  0.0
+      max:  5.0
+    ref:
+      dist:  norm
+      loc:   1.00
+      scale: 0.01
+    latex: b_1
+  b2:
+    prior:
+      dist:  norm
+      loc:   0.0
+      scale: 30.
+    ref:
+      dist:  norm
+      loc:   0.0
+      scale: 0.1
+    latex: b_2
+  bs:
+    prior:
+      dist:  norm
+      loc:   0.0
+      scale: 5.0
+    ref:
+      dist:  norm
+      loc:   0.0
+      scale: 0.1
+    latex: b_s
+  alpha0:
+    prior:
+      dist:  norm
+      loc:   0.0
+      scale: 250.
+    ref:
+      dist:  norm
+      loc:   0.0
+      scale: 1.0
+    latex: \alpha_0
+  alpha2:
+    prior:
+      dist:  norm
+      loc:   0.0
+      scale: 250.
+    ref:
+      dist:  norm
+      loc:   0.0
+      scale: 1.0
+    latex: \alpha_2
+  SN0:
+    prior:
+      dist:  norm
+      loc:   1000.
+      scale: 1000.
+    ref:
+      dist:  norm
+      loc:   1000.
+      scale:   10.
+    latex: SN_0
+  SN2:
+    prior:
+      dist:  norm
+      loc:   0.0
+      scale: 5e4
+    ref:
+      dist:  norm
+      loc:   0.0
+      scale: 0.1
+    latex: SN_2
+
+
+sampler:
+#  evaluate:
+  mcmc:
+    learn_proposal: True
+    learn_proposal_Rminus1_max: 50.
+    learn_proposal_Rminus1_max_early: 50.
+    output_every: 60s
+    measure_speeds: True
+    max_tries: 1500
+    oversample_power: 0.4
+    proposal_scale: 1.5
+    Rminus1_stop: 0.01
+output: chains/lae_base
+timing: True
+stop_on_error: True
