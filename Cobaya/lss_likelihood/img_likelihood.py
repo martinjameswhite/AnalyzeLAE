@@ -16,6 +16,7 @@ class FullShapeLikelihood(Likelihood):
     fs_datfn:  str
     fs_covfn:  str
     fs_winfn:  str
+    fs_dnzfn:  str
     pklin_fn:  str
     #
     fs_lmin:   float
@@ -54,7 +55,9 @@ class FullShapeLikelihood(Likelihood):
         """
         Loads the required data.
         """
-        # First load the data
+        # First load dN/dz.
+        self.dndz = np.loadtxt(self.basedir+self.fs_dnzfn)
+        # Then load the data
         cl_dat    = np.loadtxt(self.basedir+self.fs_datfn)
         self.ells = cl_dat[:,0]
         self.cls  = cl_dat[:,1]
