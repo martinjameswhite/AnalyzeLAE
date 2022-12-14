@@ -14,18 +14,18 @@ likelihood:
     stop_at_error: True
 
 params:
-  H0:
-    value: 68.0
-    latex: H_0
-  omegam:
-    value: 0.31
-    latex: \Omega_\mathrm{m}
-  logA:
-    value: 3.036394
-    latex: \log(10^{10} A_\mathrm{s})
-  sigma8:
-    latex: \sigma_8
-    
+  #H0:
+  #  value: 68.0
+  #  latex: H_0
+  #omegam:
+  #  value: 0.31
+  #  latex: \Omega_\mathrm{m}
+  #logA:
+  #  value: 3.036394
+  #  latex: \log(10^{10} A_\mathrm{s})
+  #sigma8:
+  #  latex: \sigma_8
+  #  
   b1:
     prior:
       dist: uniform
