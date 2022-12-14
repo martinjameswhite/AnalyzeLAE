@@ -71,7 +71,7 @@ class FullShapeLikelihood(Likelihood):
         # handle this by adjusting Cov.
         lcut = (self.ells > self.fs_lmax)\
              | (self.ells < self.fs_lmin)
-        for i in np.nonzero(kcut)[0]:
+        for i in np.nonzero(lcut)[0]:
             cov[i,:] = 0
             cov[:,i] = 0
             cov[i,i] = 1e25
