@@ -142,8 +142,8 @@ class FlatSkyCl:
         # Make a power-spectrum instance.
         # We want the effective redshift to scale Plin.
         Dz = self.cc.D_of_z(self.phiz.zeff)
-        self.pofk = LinearPowerSpectra(pofk[:,0],pofk[:,1]*Dz**2)
-        #self.pofk = LPTPowerSpectra(pofk[:,0],pofk[:,1]*Dz**2)
+        #self.pofk = LinearPowerSpectra(pofk[:,0],pofk[:,1]*Dz**2)
+        self.pofk = LPTPowerSpectra(pofk[:,0],pofk[:,1]*Dz**2)
     def pkmu(self,kk,mu,pars):
         kv,pgg,pgm,pmm = self.pofk(kk,mu,pars)
         return(pgg)
