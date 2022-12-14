@@ -3,7 +3,7 @@
 likelihood:
   img_likelihood.FullShapeLikelihood:
     basedir:       /pscratch/sd/m/mwhite/DESI/AnalyzeLAE/Cobaya/
-    Omfid:         0.31 # Should match assumption in params, if present.
+    Omfid:         0.315 # Should match assumption in params, if present.
     fs_datfn:      data/lae_base.cls
     fs_covfn:      data/lae_base.cov
     fs_winfn:      data/lae_base.wla
@@ -15,10 +15,10 @@ likelihood:
 
 params:
   #H0:
-  #  value: 68.0
+  #  value: 67.36
   #  latex: H_0
   #omegam:
-  #  value: 0.31
+  #  value: 0.315
   #  latex: \Omega_\mathrm{m}
   #logA:
   #  value: 3.036394
