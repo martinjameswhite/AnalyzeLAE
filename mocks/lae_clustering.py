@@ -48,12 +48,12 @@ Zcen = np.arange(0.0,float(pimax),dpi) + 0.5*dpi
 # Satellite numbers are ncen times ([M-kappa.Mcut]/M1)^alpha
 #
 if want_rsd:
-    lgMc_list = [11.50,11.75,12.00]:
+    lgMc_list = [11.50,11.75,12.00]
     alph_list = [0.33]
     sigm_list = [1.00]
     plat_list = [5.]
 else:
-    lgMc_list = [11.50,11.75,12.00]:
+    lgMc_list = [11.50,11.75,12.00]
     alph_list = [0.33]
     sigm_list = [1.00]
     plat_list = [5.]
