@@ -91,7 +91,10 @@ class FullShapeLikelihood(Likelihood):
         sn2  = pp.get_param('SN2')
         # The ell values at which to generate the theory.
         ell  = np.arange(25.0,self.fs_lmax+1,25.0)
-        pars = [b1,0.0,sn0]
+        bias = [b1, b2, bs, 0.]
+        cterm= [alp0,alp2,0,0]
+        stoch= [sn0, sn2, 0]
+        pars = bias + cterm + stoch
         tt   = self.aps(ell,pars)
         # Now fill in the full curve from 0..lmax_window:
         tt   = Spline(ell,tt,ext='zeros')(np.arange(self.wla.shape[1]))
