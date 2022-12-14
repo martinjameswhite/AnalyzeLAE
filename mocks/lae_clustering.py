@@ -78,6 +78,16 @@ for lgMcut in lgMc_list:
         ncen  = mock_dict['LRG']['Ncent']
         fsat  = 1-float(ncen)/float(nobj)
         #
+        pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=11,\
+                  k_hMpc_max=0.5,logk=False,num_cells=1024,\
+                  paste='TSC',compensated=True,interlaced=True)
+        mu    = pk3d['mu_binc']
+        dmu   = 1.0/len(mu)
+        kk    = pk3d['k_binc']
+        pkmu  = pk3d['LRG_LRG']
+        pk0   = (2*0+1)*np.dot(pkmu,1.0*(0*mu**2+1))*dmu
+        pk2   = (2*2+1)*np.dot(pkmu,0.5*(3*mu**2-1))*dmu
+        #
         if nobj>maxobj:
             print("Have nobj=",nobj," downsampling to ",maxobj)
             rng  = np.random.default_rng()
@@ -89,16 +99,6 @@ for lgMcut in lgMc_list:
         wpR   = xiell[0*len(Rcen):1*len(Rcen)]
         xi0   = xiell[1*len(Rcen):2*len(Rcen)]
         xi2   = xiell[2*len(Rcen):3*len(Rcen)]
-        #
-        pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=11,\
-                  k_hMpc_max=0.5,logk=False,num_cells=1024,\
-                  paste='TSC',compensated=True,interlaced=True)
-        mu    = pk3d['mu_binc']
-        dmu   = 1.0/len(mu)
-        kk    = pk3d['k_binc']
-        pkmu  = pk3d['LRG_LRG']
-        pk0   = (2*0+1)*np.dot(pkmu,1.0*(0*mu**2+1))*dmu
-        pk2   = (2*2+1)*np.dot(pkmu,0.5*(3*mu**2-1))*dmu
         #
         dats.append({'hod':hod,'nobj':nobj,'fsat':fsat,\
                      'wp':wpR.tolist(),'xi0':xi0.tolist(),'xi2':xi2.tolist(),\
