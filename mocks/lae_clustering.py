@@ -79,7 +79,7 @@ for lgMcut in lgMc_list:
         fsat  = 1-float(ncen)/float(nobj)
         #
         pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=11,\
-                  k_hMpc_max=0.5,logk=False,num_cells=1024,\
+                  k_hMpc_max=0.5,logk=False,num_cells=512,\
                   paste='TSC',compensated=True,interlaced=True)
         mu    = pk3d['mu_binc']
         dmu   = 1.0/len(mu)
