@@ -97,7 +97,7 @@ class FullShapeLikelihood(Likelihood):
         pars = bias + cterm + stoch
         tt   = self.aps(ell,pars)
         # Now fill in the full curve from 0..lmax_window:
-        tt   = Spline(ell,tt,ext='zeros')(np.arange(self.wla.shape[1]))
+        tt   = Spline(ell,tt,ext=0)(np.arange(self.wla.shape[1]))
         return(tt)
         #
     def cl_observe(self,tt):
