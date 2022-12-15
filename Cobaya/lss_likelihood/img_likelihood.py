@@ -90,7 +90,7 @@ class FullShapeLikelihood(Likelihood):
         sn0  = pp.get_param('SN0')
         sn2  = pp.get_param('SN2')
         # The ell values at which to generate the theory.
-        ell  = np.arange(25.0,self.fs_lmax+1,25.0)
+        ell  = np.arange(25.0,self.fs_lmax+100,25.0)
         bias = [b1, b2, bs, 0.]
         cterm= [alp0,alp2,0,0]
         stoch= [sn0, sn2, 0]
