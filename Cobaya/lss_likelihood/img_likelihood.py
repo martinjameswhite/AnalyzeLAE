@@ -42,6 +42,10 @@ class FullShapeLikelihood(Likelihood):
         #
     def logp(self,**params_values):
         """Return a log-likelihood."""
+        # There are several "linear" parameters that could be
+        # analytically marginalized to make the sampler run much
+        # more quickly.  For now it's helpful to have them be
+        # explicit, but this could be implemented in future.
         cl_thy  = self.cl_predict()
         cl_obs  = self.cl_observe(cl_thy)
         diff    = self.cls - cl_obs
