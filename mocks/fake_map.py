@@ -36,6 +36,7 @@ velf = acen*100*cc.E_of_z(zcen)
 print("zcen=",zcen,", acen=",acen,flush=True)
 print("Lbox=",Lbox,"Mpc/h.",flush=True)
 print("chi0=",chi0,"Mpc/h.",flush=True)
+print("velf=",velf,flush=True)
 #
 # Generate the mock objects from an HOD.
 # For the LRG HOD sigma is defined with natural logs,
@@ -54,34 +55,42 @@ mock_dict= newBall.run_hod(newBall.tracers,want_rsd,\
 nobj  = mock_dict['LRG']['mass'].size
 ncen  = mock_dict['LRG']['Ncent']
 fsat  = 1-float(ncen)/float(nobj)
+print("Generated ",nobj," objects in box.")
+print("nbar=",nobj/Lbox**3," and fsat=",fsat,flush=True)
 # Go into redshift space and periodically wrap.
 mock_dict['LRG']['zred'] = mock_dict['LRG']['z']+mock_dict['LRG']['vz']/velf
-wrap = np.nonzero( mock_dict['LRG']['zred']>Lbox )[0]
+wrap = np.nonzero( mock_dict['LRG']['zred']> 0.5*Lbox )[0]
 if len(wrap)>0: mock_dict['LRG']['zred'][wrap] -= Lbox
-wrap = np.nonzero( mock_dict['LRG']['zred']<0 )[0]
+wrap = np.nonzero( mock_dict['LRG']['zred']<-0.5*Lbox )[0]
 if len(wrap)>0: mock_dict['LRG']['zred'][wrap] += Lbox
 # Now select a small region of the box.
-# At this point we should implement a z-dependent selection
+# We may eventually want to do this with arbitrary centers or
+# shifts of the coordinates to generate many maps.  Leave that
+# for now.
+# Also, at this point we should implement a z-dependent selection
 # function, but for now I'll use a hard zcut.
 diam  = 3.25 * np.pi/180. # Diameter of field, in radians.
 Lside = diam * chi0
 depth = 30.0 # Mpc/h
 print("Lside=",Lside,"Mpc/h.  Depth=",depth,"Mpc/h.",flush=True)
 #
-in_survey = np.nonzero( (mock_dict['LRG']['x']>0.5*(Lbox-Lside))&\
-                        (mock_dict['LRG']['x']<0.5*(Lbox+Lside))&\
-                        (mock_dict['LRG']['y']>0.5*(Lbox-Lside))&\
-                        (mock_dict['LRG']['y']<0.5*(Lbox+Lside))&\
-                        (mock_dict['LRG']['zred']>0.5*(Lbox-depth))&\
-                        (mock_dict['LRG']['zred']<0.5*(Lbox+depth)) )[0]
+in_survey = np.nonzero( (mock_dict['LRG']['x']>-0.5*Lside)&\
+                        (mock_dict['LRG']['x']< 0.5*Lside)&\
+                        (mock_dict['LRG']['y']>-0.5*Lside)&\
+                        (mock_dict['LRG']['y']< 0.5*Lside)&\
+                        (mock_dict['LRG']['zred']>-0.5*depth)&\
+                        (mock_dict['LRG']['zred']< 0.5*depth) )[0]
 print("Keeping ",len(in_survey)," objects in survey.",flush=True)
 # Now bin everything into a map...there are very few objects so we
 # don't need to be particularly clever.
 Nside= 512
 dmap = np.zeros( (Nside,Nside) )
+ixmin,ixmax = 10*Nside,-1
 for i in in_survey:
-    ix  = int( ((mock_dict['LRG']['x'][i]-0.5*Lbox)/Lside+0.5)*Nside )
-    iy  = int( ((mock_dict['LRG']['y'][i]-0.5*Lbox)/Lside+0.5)*Nside )
+    ix  = int( ((mock_dict['LRG']['x'][i])/Lside+0.5)*Nside )
+    iy  = int( ((mock_dict['LRG']['y'][i])/Lside+0.5)*Nside )
+    if ix>ixmax: ixmax = ix
+    if ix<ixmin: ixmin = ix
     dmap[ix,iy] += 1.0
 # and convert to overdensity.
 dmap /= np.sum(dmap)/Nside**2
