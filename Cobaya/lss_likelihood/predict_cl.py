@@ -56,7 +56,7 @@ class LPTPowerSpectra():
         # cterms = [-3.4,-1.7,6.5,0]
         # stoch  = [1500.,-1900.,0]
         # pars   = biases + cterms + stoch
-        self.lpt.make_pltable(f=1,kmin =5e-3,kmax=1.0,nk=60,nmax=4,apar=1,aperp=1)
+        self.lpt.make_pltable(f=1,kmin=5e-3,kmax=1.0,nk=60,nmax=4,apar=1,aperp=1)
     def __call__(self,kk,mu,pars):
         """Computes the three P(k,mu).  Returns k,Pgg,Pgm,Pmm [Mpc/h units]."""
         # We will approximate P(k,mu) through the multipole expansion.
