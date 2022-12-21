@@ -85,12 +85,9 @@ print("Keeping ",len(in_survey)," objects in survey.",flush=True)
 # don't need to be particularly clever.
 Nside= 512
 dmap = np.zeros( (Nside,Nside) )
-ixmin,ixmax = 10*Nside,-1
 for i in in_survey:
     ix  = int( ((mock_dict['LRG']['x'][i])/Lside+0.5)*Nside )
     iy  = int( ((mock_dict['LRG']['y'][i])/Lside+0.5)*Nside )
-    if ix>ixmax: ixmax = ix
-    if ix<ixmin: ixmin = ix
     dmap[ix,iy] += 1.0
 # and convert to overdensity.
 dmap /= np.sum(dmap)/Nside**2
@@ -109,8 +106,8 @@ hdr['Lx'     ] = diam
 hdr['Ly'     ] = diam
 hdr['COMMENT'] = 'Distances in Mpc/h, angles in radians.'
 outdict = {}
-outdict['del'   ] = dmap.astype('f4')
-outdict['msk'   ] = np.ones_like(outdict['del'])
+outdict['del'] = dmap.astype('f4')
+outdict['msk'] = np.ones_like(outdict['del'])
 #
 print(hdr)
 #
