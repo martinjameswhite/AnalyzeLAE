@@ -5,7 +5,7 @@
 #SBATCH -o LAEmap.out
 #SBATCH -e LAEmap.err
 #SBATCH -q debug
-#SBATCH -C haswell
+#SBATCH -C cpu
 #SBATCH -A m68
 #
 module unload craype-hugepages2M
