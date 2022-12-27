@@ -45,7 +45,7 @@ print("velf=",velf,flush=True)
 #
 HOD_params['LRG_params']['logM_cut'] = 11.75
 HOD_params['LRG_params']['logM1'   ] = 11.75 + np.log10(5.)
-HOD_params['LRG_params']['sigma'   ] = 0,66
+HOD_params['LRG_params']['sigma'   ] = 0.66
 HOD_params['LRG_params']['kappa'   ] = 0.33
 HOD_params['LRG_params']['alpha'   ] = 0.33
 newBall  = AbacusHOD(sim_params,HOD_params,clustering_params)
