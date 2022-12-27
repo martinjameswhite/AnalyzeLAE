@@ -1,9 +1,9 @@
 #!/bin/bash -l
-#SBATCH -J LAE_map
+#SBATCH -J FakeLAE
 #SBATCH -N 1
 #SBATCH -t 00:30:00
-#SBATCH -o LAEmap.out
-#SBATCH -e LAEmap.err
+#SBATCH -o FakeLAE.out
+#SBATCH -e FakeLAE.err
 #SBATCH -q debug
 #SBATCH -C cpu
 #SBATCH -A m68
