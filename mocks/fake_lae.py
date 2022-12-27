@@ -63,11 +63,10 @@ class MockLAE:
         # For the LRG HOD sigma is defined with natural logs,
         # with the sqrt{2}.
         # Satellite numbers are ncen times ([M-kappa.Mcut]/M1)^alpha
-        print(self.HOD_params['LRG_params'])
         for k in params.keys():
             self.HOD_params['LRG_params'][k] = params[k]
             self.d[k] = params[k]
-        print(self.HOD_params['LRG_params'])
+        #
     def generate(self):
         """Calls abacusutils to generate the mock sample."""
         newBall = AbacusHOD(self.sim_params,\
