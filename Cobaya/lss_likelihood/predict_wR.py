@@ -4,7 +4,7 @@
 import numpy       as np
 import sys
 
-from lcdm              import LCDM
+
 from scipy.integrate   import simps as simpson
 from scipy.special     import legendre
 from scipy.interpolate import InterpolatedUnivariateSpline as Spline
@@ -48,13 +48,14 @@ class LPTCorrelationFunctions():
 
 
 
-class NbodyXi():
+class NbodyCorrelationFunctions():
     """Returns N-body derived xi_ell(s) from pre-computed tables."""
     def __init__(self,json_file):
         """Reads the tables from a JSON file."""
         self.mod = json.load(open(json_file,"r"))
     def __call__(self,ss,mu,pars):
-        """Reads the three xi(s,mu).  Returns s,xi_gg,xi_gm,xi_mm."""
+        """Reads the three xi(s,mu).  Returns s,xi_gg,xi_gm,xi_mm.
+        In this case 'pars' is an integer index, giving the model number."""
         # We will approximate xi(s,mu) through the multipole expansion.
         mock= self.mod['mocks'][pars]
         ss  = np.array(self.mod['R'])
@@ -80,27 +81,11 @@ class NbodyXi():
 class ThinShellWR:
     # Computes the thin-shell expression for w_theta(R).
     #
-    def __init__(self,OmM,XiModel,chibar,Delta):
+    def __init__(self,XiModel,chibar,Delta):
         """Initialize the class."""
         # Store the midpoint and shell width.
         self.chi0 = chibar
         self.delt = Delta
-        # We may want an effective redshift to scale Plin,
-        # since speed is not an issue do bisection though
-        # we also happen to know a derivative for this function!
-        cc = LCDM(OmM)
-        zmin,zmax = 1.0,5.0
-        cmin,cmax = 0.0,1e10
-        while zmax-zmin>0.001:
-            zmid = 0.5*(zmin+zmax)
-            cmid = cc.chi_of_z(zmid)
-            if cmid>chibar:
-                zmax,cmax = zmid,cmid
-            else:
-                zmin,cmin = zmid,cmid
-        Dz = cc.D_of_z(zmid)
-        self.zmid = zmid
-        self.Dz   = Dz
         # Copy the correlation function model,
         # e.g. LPTCorrelationFunction(klin,plin*Dz**2)
         self.xiofs = XiModel
