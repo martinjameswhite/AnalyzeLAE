@@ -163,14 +163,16 @@ class MockLAE:
         gals = self.laes['LRG']
         rra  = []
         dec  = []
+        bms  = []
         for i in np.nonzero( self.bitmask&1 )[0]:
             rra.append( gals['x'][i]*ichi )
             dec.append( gals['y'][i]*ichi )
+            bms.append( self.bitmask[i]   )
         # and save them in a dictionary.
         hdr,outdict    = self.make_hdr(),{}
         outdict['RA' ] = np.array(rra)
         outdict['DEC'] = np.array(dec)
-        outdict['BITMASK']=self.bitmask
+        outdict['BITMASK']=np.array(bms)
         tt = Table(outdict)
         for k in hdr.keys(): tt.meta[k] = hdr[k]
         tt.write(outfn,overwrite=True)
