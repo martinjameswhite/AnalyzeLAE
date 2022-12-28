@@ -170,6 +170,7 @@ class MockLAE:
         hdr,outdict    = self.make_hdr(),{}
         outdict['RA' ] = np.array(rra)
         outdict['DEC'] = np.array(dec)
+        outdict['BITMASK']=self.bitmask
         tt = Table(outdict)
         for k in hdr.keys(): tt.meta[k] = hdr[k]
         tt.write(outfn,overwrite=True)
