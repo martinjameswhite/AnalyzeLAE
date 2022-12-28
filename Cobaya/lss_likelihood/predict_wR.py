@@ -48,7 +48,25 @@ class LPTCorrelationFunctions():
 
 
 
-
+class NbodyXi():
+    """Returns N-body derived xi_ell(s) from pre-computed tables."""
+    def __init__(self,json_file):
+        """Reads the tables from a JSON file."""
+        self.mod = json.load(open(json_file,"r"))
+    def __call__(self,ss,mu,pars):
+        """Reads the three xi(s,mu).  Returns s,xi_gg,xi_gm,xi_mm."""
+        # We will approximate xi(s,mu) through the multipole expansion.
+        mock= self.mod['mocks'][pars]
+        ss  = np.array(self.mod['R'])
+        x0  = Spline(ss,np.array(mock['xi0']))
+        x2  = Spline(ss,np.array(mock['xi2']))
+        x4  = np.zeros_like(ss)
+        # Return only xi_{gg}, set the others to zero.
+        xgg = x0(ss)*1.0 + x2(ss)*legendre(2)(mu) + x4(ss)*legendre(4)(mu)
+        xgm = np.zeros_like(ss)
+        xmm = np.zeros_like(ss)
+        return((xgg,xgm,xmm))
+        #
 
 
 
@@ -61,13 +79,15 @@ class LPTCorrelationFunctions():
 
 class ThinShellWR:
     # Computes the thin-shell expression for w_theta(R).
-    def __init__(self,OmM,pofk,chibar,Delta):
+    #
+    def __init__(self,OmM,XiModel,chibar,Delta):
         """Initialize the class."""
         # Store the midpoint and shell width.
         self.chi0 = chibar
         self.delt = Delta
-        # We want the effective redshift to scale Plin,
-        # since speed is not an issue do bisection.
+        # We may want an effective redshift to scale Plin,
+        # since speed is not an issue do bisection though
+        # we also happen to know a derivative for this function!
         cc = LCDM(OmM)
         zmin,zmax = 1.0,5.0
         cmin,cmax = 0.0,1e10
@@ -79,8 +99,11 @@ class ThinShellWR:
             else:
                 zmin,cmin = zmid,cmid
         Dz = cc.D_of_z(zmid)
-        # Make an LPT instance.
-        self.xiofs = LPTCorrelationFunctions(pofk[:,0],pofk[:,1]*Dz**2)
+        self.zmid = zmid
+        self.Dz   = Dz
+        # Copy the correlation function model,
+        # e.g. LPTCorrelationFunction(klin,plin*Dz**2)
+        self.xiofs = XiModel
     def xismu(self,ss,mu,pars):
         xgg,xgm,xmm = self.xiofs(ss,mu,pars)
         return(xgg)
