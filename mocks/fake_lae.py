@@ -87,7 +87,7 @@ class MockLAE:
         # Finally let's make a bitmask for the objects.  If
         # we use a single byte FITS interprets this as a boolean,
         # so we'll use a 16-bit mask.
-        self.bitmask = np.zeros(self.d['nobj'],dtype='int16')
+        self.bitmask = np.zeros(self.d['nobj'],dtype='uint16')
         #
     def assign_lum(self,bright_frac):
         """Assigns Llya to the mock objects."""
@@ -172,9 +172,9 @@ class MockLAE:
             bms.append( self.bitmask[i]   )
         # and save them in a dictionary.
         hdr,outdict    = self.make_hdr(),{}
-        outdict['RA' ] = np.array(rra)
-        outdict['DEC'] = np.array(dec)
-        outdict['BITMASK']=np.array(bms,dtype='int16')
+        outdict['RA' ] = np.array(rra,dtype='float32')
+        outdict['DEC'] = np.array(dec,dtype='float32')
+        outdict['BITMASK']=np.array(bms,dtype='uint16')
         tt = Table(outdict)
         for k in hdr.keys(): tt.meta[k] = hdr[k]
         tt.write(outfn,overwrite=True)
