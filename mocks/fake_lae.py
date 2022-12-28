@@ -84,8 +84,10 @@ class MockLAE:
         # and save the sample for later processing.  Could instead
         # return this and then pass it to other methods.  TBD.
         self.laes  = laes
-        # Finally let's make a bitmask for the objects.
-        self.bitmask = np.zeros(self.d['nobj'],dtype='b')
+        # Finally let's make a bitmask for the objects.  If
+        # we use a single byte FITS interprets this as a boolean,
+        # so we'll use a 16-bit mask.
+        self.bitmask = np.zeros(self.d['nobj'],dtype='int16')
         #
     def assign_lum(self,bright_frac):
         """Assigns Llya to the mock objects."""
@@ -115,7 +117,7 @@ class MockLAE:
                                 (gals['zred']>-0.5*depth)&\
                                 (gals['zred']< 0.5*depth) )[0]
         self.d['nkeep'] = len(in_survey)
-        self.bitmask &= 254
+        self.bitmask &= (256*255 + 254)
         self.bitmask[in_survey] |= 1
         #
     def make_map(self,Nside=512):
@@ -172,7 +174,7 @@ class MockLAE:
         hdr,outdict    = self.make_hdr(),{}
         outdict['RA' ] = np.array(rra)
         outdict['DEC'] = np.array(dec)
-        outdict['BITMASK']=np.array(bms,dtype='b')
+        outdict['BITMASK']=np.array(bms,dtype='int16')
         tt = Table(outdict)
         for k in hdr.keys(): tt.meta[k] = hdr[k]
         tt.write(outfn,overwrite=True)
@@ -191,7 +193,7 @@ if __name__=="__main__":
               'sigma':0.66,'kappa':0.33,'alpha':0.33}
     laes.set_hod(params)
     laes.generate()
-    laes.assign_lum(0.5) # Ignore output for now.
+    laes.assign_lum(0.5)
     laes.select(diam)
     dmap = laes.make_map(Nside)
     laes.write_map(dmap,Nside,diam,"mock_lae_map.fits")
