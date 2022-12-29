@@ -34,8 +34,8 @@ class MockLAE:
         self.d = {}
         self.d['chi0'] = chi0
         self.d['dchi'] = dchi
-        self.d['zcen'] = self.meta['Redshift']
-        self.d['acen'] = self.meta['ScaleFactor']
+        self.d['zbox'] = self.meta['Redshift']
+        self.d['abox'] = self.meta['ScaleFactor']
         self.d['Lbox'] = self.meta['BoxSizeHMpc']
         self.d['OmM' ] = self.meta['Omega_M']
         #
@@ -43,7 +43,7 @@ class MockLAE:
         # assuming LCDM.
         OmM  = self.meta['Omega_M']
         Eofz = lambda zz: np.sqrt( OmM*(1+zz)**3+(1-OmM) )
-        self.d['velf'] = self.d['acen']*100*Eofz(self.d['zcen'])
+        self.d['velf'] = self.d['abox']*100*Eofz(self.d['zbox'])
         #
         # Later we will want a random number generator.  Use a
         # fixed seed to make this reproducable.
@@ -97,41 +97,48 @@ class MockLAE:
         # faint, which we do randomly.  We could also weight by
         # a power of halo mass.
         rr = self.rng.uniform(size=self.d['nobj'])
-        self.bitmask[rr<bright_frac] |= 2
+        self.bitmask[rr<bright_frac] |= 1
         #
-    def select(self,diam):
-        """Select a small region of the box of diameter diam (radians)."""
-        # We may eventually want to do this with arbitrary centers or
-        # shifts of the coordinates to generate many maps.  Leave that
-        # for now.
+    def select(self,diam,offset):
+        """Select a small region of the box of diameter diam (radians)
+        with the center of the box shifted by offset (fraction of box)."""
         # Also, at this point we should implement a z-dependent selection
         # function, but for now I'll use a hard zcut.
+        Lbox  = self.d['Lbox']
         Lside = diam * self.d['chi0']
         depth = self.d['dchi']
         gals  = self.laes['LRG']
         self.d['Lside'] = Lside
-        in_survey = np.nonzero( (gals['x']>-0.5*Lside)&\
-                                (gals['x']< 0.5*Lside)&\
-                                (gals['y']>-0.5*Lside)&\
-                                (gals['y']< 0.5*Lside)&\
-                                (gals['zred']>-0.5*depth)&\
-                                (gals['zred']< 0.5*depth) )[0]
+        # Shift the center of the box and select objects.
+        xpos = self.periodic(gals['x'   ]+offset[0]*Lbox)
+        ypos = self.periodic(gals['y'   ]+offset[1]*Lbox)
+        zpos = self.periodic(gals['zred']+offset[2]*Lbox)
+        in_survey = np.nonzero( (xpos>-0.5*Lside)&\
+                                (xpos< 0.5*Lside)&\
+                                (ypos>-0.5*Lside)&\
+                                (ypos< 0.5*Lside)&\
+                                (zpos>-0.5*depth)&\
+                                (zpos< 0.5*depth) )[0]
+        # Store the results for later use.
         self.d['nkeep'] = len(in_survey)
-        self.bitmask &= (256*255 + 254)
-        self.bitmask[in_survey] |= 1
+        self.xpos = xpos[in_survey]
+        self.ypos = ypos[in_survey]
+        self.zpos = zpos[in_survey]
+        self.bitm = self.bitmask[in_survey]
         #
     def make_map(self,Nside=512):
         """Create the map."""
         # Now bin everything into a map...there are very few objects so we
         # don't need to be particularly clever.
-        gals = self.laes['LRG']
         Lside= self.d['Lside']
         dmap = np.zeros( (Nside,Nside) )
-        for i in np.nonzero( self.bitmask&1 )[0]:
-            ix  = int( ((gals['x'][i])/Lside+0.5)*Nside )
-            iy  = int( ((gals['y'][i])/Lside+0.5)*Nside )
+        for i in range(self.d['nkeep']):
+            ix  = int( ((self.xpos[i])/Lside+0.5)*Nside )
+            iy  = int( ((self.ypos[i])/Lside+0.5)*Nside )
             dmap[ix,iy] += 1.0
-        # and convert to overdensity.
+        # and convert to overdensity -- there's a question here of
+        # whether to use the mean density estimated from the whole
+        # box or the map itself.  The latter is more "observational".
         dmap /= np.sum(dmap)/Nside**2
         dmap -= 1.0
         return(dmap)
@@ -162,19 +169,13 @@ class MockLAE:
         # Generate the angular coordinates, in degrees.
         # Assume small angles and plane projection.
         ichi = 1.0/self.d['chi0'] * 180./np.pi
-        gals = self.laes['LRG']
-        rra  = []
-        dec  = []
-        bms  = []
-        for i in np.nonzero( self.bitmask&1 )[0]:
-            rra.append( gals['x'][i]*ichi )
-            dec.append( gals['y'][i]*ichi )
-            bms.append( self.bitmask[i]   )
+        rra  = self.xpos*ichi
+        dec  = self.ypos*ichi
         # and save them in a dictionary.
         hdr,outdict    = self.make_hdr(),{}
-        outdict['RA' ] = np.array(rra,dtype='float32')
-        outdict['DEC'] = np.array(dec,dtype='float32')
-        outdict['BITMASK']=np.array(bms,dtype='uint16')
+        outdict['RA' ] = rra.astype('float32')
+        outdict['DEC'] = dec.astype('float32')
+        outdict['BITMASK']=self.bitm
         tt = Table(outdict)
         for k in hdr.keys(): tt.meta[k] = hdr[k]
         tt.write(outfn,overwrite=True)
@@ -194,7 +195,7 @@ if __name__=="__main__":
     laes.set_hod(params)
     laes.generate()
     laes.assign_lum(0.5)
-    laes.select(diam)
+    laes.select(diam,[0.,0.,0.])
     dmap = laes.make_map(Nside)
     laes.write_map(dmap,Nside,diam,"mock_lae_map.fits")
     laes.write_cat("mock_lae_cat.fits")
