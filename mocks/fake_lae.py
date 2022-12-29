@@ -147,7 +147,6 @@ class MockLAE:
         """Puts some information into a 'header' dictionary."""
         hdr = {}
         hdr['sim'    ] = self.sim_params['sim_name']
-        hdr['COMMENT'] = 'Distances in Mpc/h, angles in radians.'
         for k in self.d.keys(): hdr[k] = self.d[k]
         return(hdr)
         #
@@ -157,6 +156,7 @@ class MockLAE:
         hdr = self.make_hdr()
         hdr['Lx'] = diam
         hdr['Ly'] = diam
+        hdr['COMMENT'] = 'Distances in Mpc/h, angles in radians.'
         outdict = {}
         outdict['del'] = dmap.astype('f4')
         outdict['msk'] = np.ones_like(outdict['del'])
@@ -173,6 +173,7 @@ class MockLAE:
         dec  = self.ypos*ichi
         # and save them in a dictionary.
         hdr,outdict    = self.make_hdr(),{}
+        hdr['COMMENT'] = 'Distances in Mpc/h'
         outdict['RA' ] = rra.astype('float32')
         outdict['DEC'] = dec.astype('float32')
         outdict['BITMASK']=self.bitm
