@@ -192,7 +192,7 @@ if __name__=="__main__":
     diam   = 3.2 * np.pi/180.
     laes   = MockLAE('lae_base.yaml',4385.,30.)
     params = {'logM_cut':11.75,'logM1':11.75+np.log10(5.),\
-              'sigma':0.66,'kappa':0.33,'alpha':0.33}
+              'sigma':0.66,'kappa':0.33,'alpha':0.50}
     laes.set_hod(params)
     laes.generate()
     laes.assign_lum(0.5)
