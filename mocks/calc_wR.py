@@ -63,8 +63,8 @@ if __name__=="__main__":
     ran['RA' ] = rng.uniform(low=-Lx/2.,high=Lx/2.,size=nran)
     ran['DEC'] = rng.uniform(low=-Ly/2.,high=Ly/2.,size=nran)
     # Get rid of negative RAs, just for ease.
-    dat['RA'] += Lside
-    ran['RA'] += Lside
+    dat['RA'] += Lx
+    ran['RA'] += Lx
     # and compute w(theta), converting theta to projected
     # distance, R, assuming log-space bins.
     bins,wt = calc_wt(dat,ran)
