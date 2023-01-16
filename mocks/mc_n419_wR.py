@@ -16,12 +16,13 @@ if __name__=="__main__":
     # fixed seed for reproducability.
     rng    = np.random.default_rng(1)
     # Define the mock catalog, shell and HOD.
+    # 16  11.75  12.45   0.50   0.33   0.50   0.10   8.33e-02
     laes   = MockLAE('lae_n419.yaml',3979.,33.)
     params = {'logM_cut':11.75,'logM1':11.75+np.log10(5.),\
-              'sigma':0.66,'kappa':0.33,'alpha':0.50}
+              'sigma':0.50,'kappa':0.33,'alpha':0.50}
     laes.set_hod(params)
     laes.generate()
-    laes.assign_lum(0.5)
+    laes.assign_lum(0.25)
     # Select a field so we have access to the Lside etc.
     diam   = 3.2 * np.pi/180.
     laes.select(diam,[0.,0.,0.])
@@ -77,6 +78,7 @@ if __name__=="__main__":
     wts  = np.array(wts)
     wavg = np.mean(wts,axis=0)
     werr = np.std( wts,axis=0)
+    wcor = np.corrcoef(wts,rowvar=False)
     navg = np.mean(np.array(ngals,dtype='float'))
     nerr = np.std( np.array(ngals,dtype='float'))
     # Now write out some results.
@@ -91,6 +93,11 @@ if __name__=="__main__":
                    format(fsamp,ntarget))
         fout.write("# Have {:.1f}+/-{:.2f} LAEs/field.\n".\
                    format(navg,nerr))
+        fout.write("# Correlation matrix is:\n")
+        for i in range(rval.size):
+            outstr = "#"
+            for j in range(rval.size): outstr += " {:8.4f}".format(wcor[i,j])
+            fout.write(outstr + "\n")
         fout.write("# {:>8s} {:>15s} {:>15s}\n".\
                    format("R[Mpc/h]","wR","dwR"))
         for i in range(rval.size):
