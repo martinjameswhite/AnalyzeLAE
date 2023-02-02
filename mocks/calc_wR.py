@@ -24,13 +24,13 @@ def calc_wt(dat,ran,bins=None):
     dra = dat['RA' ].astype('float32')
     ddc = dat['DEC'].astype('float32')
     if not 'WT' in dat.keys():
-        dwt = np.ones_like(dat['RA'])
+        dwt = np.ones_like(dat['RA']).astype('float32')
     else:
         dwt = dat['WT'].astype('float32')
     rra = ran['RA' ].astype('float32')
     rdc = ran['DEC'].astype('float32')
     if not 'WT' in ran.keys():
-        rwt = np.ones_like(ran['RA'])
+        rwt = np.ones_like(ran['RA']).astype('float32')
     else:
         rwt = ran['WT'].astype('float32')
     # Bin edges are specified in degrees, if nothing
