@@ -26,8 +26,9 @@ class MockLAE:
         self.meta = get_meta(self.sim_params['sim_name'],\
                              redshift=self.sim_params['z_mock'])
         #
-        # additional parameter choices
-        self.want_rsd      = self.HOD_params['want_rsd']
+        # additional parameter choices -- we will apply RSD
+        # ourselves so override the setting in HOD_params.
+        self.want_rsd      = False
         self.write_to_disk = self.HOD_params['write_to_disk']
         #
         # Save some configuration parameters for later use.
