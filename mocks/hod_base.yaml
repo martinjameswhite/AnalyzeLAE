@@ -1,0 +1,129 @@
+# Comment out the probes you don't need
+# CAREFUL: yaml is super sensitive to spaces - don't use tabs
+
+
+# Simulation parameters
+sim_params:
+    #sim_name: 'AbacusSummit_base_c000_ph000'  # which simulation 
+    sim_name: 'AbacusSummit_high_c000_ph100' # which simulation 
+    sim_dir:  /global/cfs/cdirs/desi/cosmosim/Abacus/
+    output_dir: './'          # where to output galaxy mocks, need trailing slash.
+    subsample_dir: './'       # where to output subsample data, need trailing slash.
+    z_mock: 3.0               # which redshift slice
+    cleaned_halos: True       # load cleaned halos?
+    
+prepare_sim:
+    Nparallel_load: 16  # number of thread for organizing simulation outputs (prepare_sim)
+
+
+
+zcv_params:
+    #zcv_dir: "./zcv_scratch/"
+    zcv_dir: "./"
+    ic_dir: "/global/cfs/cdirs/desi/cosmosim/Abacus/ic/"
+    tracer_dir: './'          # made this up.
+    ##cosmo_dir: "/pscratch/sd/m/mwhite/AbacusSummit/Cosmologies/" # Check out from GitHub.
+    nmesh: 1152
+    kcut: 1.8095573684677209 # k_Ny/2
+    fields: ["1cb", "delta", "delta2"]
+
+power_params:
+    nbins_k:  150
+    nbins_mu: 1
+    poles: [0, 2, 4]
+    k_hMpc_max: 1.5
+    paste: 'TSC'
+    compensated: True
+    interlaced: True
+    logk: False
+    nmesh: 1152   # match zcv just in case I forgot to implement
+
+
+
+# HOD parameters
+HOD_params:
+    want_ranks: False               # want to implement satellite profile flexiblities?
+    want_AB: False                  # are you planning on implementing assembly bias (AB)?
+    # Ndim: 1024                    # size of grid for grid based local environment, we opted to use neighbor count based local environment instead
+    density_sigma: 3               # scale radius in Mpc / h for local density calculation
+    tracer_flags:                  # which tracer do we want?
+        LRG: True
+        ELG: False
+        QSO: False
+    want_rsd: True                 # want RSD? 
+    write_to_disk: False
+
+    # parameters for setting up the HOD of LBGs
+    LRG_params:
+        logM_cut: 12.2
+        logM1: 13.0 # Just make this big for now.
+        sigma: 1.0  # this is defined with natural logs, with the sqrt{2}.
+        alpha: 0.33 # satellites slope, satellite numbers are ncen times
+        kappa: 0.33 #   ([M-kappa.Mcut]/M1)^alpha
+        alpha_c: 0
+        alpha_s: 1
+        s: 0        # satellite profile parameters.
+        s_v: 0      # satellite profile parameters.
+        s_p: 0      # satellite profile parameters.
+        s_r: 0      # satellite profile parameters.
+        Acent: 0    # Assembly bias parametets.
+        Asat: 0     # Assembly bias parametets.
+        Bcent: 0    # Assembly bias parametets.
+        Bsat: 0     # Assembly bias parametets.
+        ic: 1.0     # Incompleteness.
+
+    # parameters for setting up the HOD of ELGs
+    ELG_params:
+        p_max: 0.53
+        Q: 10.
+        logM_cut: 12.3
+        kappa: 1.
+        sigma: 0.58
+        logM1: 13.53
+        alpha: 0.9
+        gamma: 4.12
+        A_s: 1.
+        alpha_c: 0
+        alpha_s: 1
+        s: 0
+        s_v: 0
+        s_p: 0
+        s_r: 0
+        Acent: 0
+        Asat: 0
+        Bcent: 0
+        Bsat: 0
+        ic: 1.0
+
+    # parameters for setting up the HOD of ELGs
+    QSO_params:
+        p_max: 0.33
+        logM_cut: 12.21
+        kappa: 1.0
+        sigma: 0.56
+        logM1: 13.94
+        alpha: 0.4
+        A_s: 1.
+        alpha_c: 0
+        alpha_s: 1
+        s: 0
+        s_v: 0
+        s_p: 0
+        s_r: 0
+        Acent: 0
+        Asat: 0
+        Bcent: 0
+        Bsat: 0
+        ic: 1.0
+
+
+# clustering parameters
+clustering_params:
+#    power_type: 'wp'
+    clustering_type: 'xirppi'
+    bin_params:
+        logmin: -0.3010299956639812
+        logmax: 1.6989700043360187
+        nbins: 16
+    pimax: 100
+    pi_bin_size: 2
