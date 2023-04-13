@@ -4,9 +4,13 @@
 # computing their clustering.
 #
 import numpy as np
-from   fake_lae import MockLAE
-from   calc_wR  import calc_wt
 
+from   fake_lae             import MockLAE
+from   calc_wR              import calc_wt
+from   rotate_to            import rotate_to
+from   make_lae_survey_mask import SurveyMask
+from   astropy.table        import Table
+from   scipy.interpolate    import InterpolatedUnivariateSpline as Spline
 
 
 
@@ -15,6 +19,20 @@ if __name__=="__main__":
     # Set up a random number generator with a
     # fixed seed for reproducability.
     rng    = np.random.default_rng(1)
+    # Set the name of the field we'll work with and load
+    # the mask, random catalog and radial selection fn.
+    fname= "cosmos"
+    mask = SurveyMask('lae_survey_msk_N419.fits')
+    tt   = Table.read('lae_survey_ran_N419.fits')
+    # Set the center of the field.
+    cra = np.median(tt['RA'])
+    cdc = np.median(tt['DEC'])
+    print("Setting field center to ({:f},{:f})".format(cra,cdc),flush=True)
+    # Mask the randoms.
+    ww,ran     = mask(tt['RA'],tt['DEC']),{}
+    ran['RA' ] = tt['RA' ][ww]
+    ran['DEC'] = tt['DEC'][ww]
+    print("Random size ",len(ran['RA']),flush=True)
     # Define the mock catalog, shell and HOD.
     # 16  11.75  12.45   0.50   0.33   0.50   0.10   8.33e-02
     laes   = MockLAE('lae_n419.yaml',3979.,33.)
@@ -24,13 +42,16 @@ if __name__=="__main__":
     laes.generate()
     laes.assign_lum(0.25)
     # Select a field so we have access to the Lside etc.
-    diam   = 3.2 * np.pi/180.
+    diam   = 4.5 * np.pi/180.
     laes.select(diam,[0.,0.,0.])
     chi0   = laes.d['chi0']
     Lside  = laes.d['Lside']
     Lx     = Lside/chi0 * 180./np.pi
     Ly     = Lside/chi0 * 180./np.pi
     ichi   = 1.0/  chi0 * 180./np.pi
+    # Match the min/max values of chi.
+    chimin,chimax = np.min(laes.zpos+chi0),np.max(laes.zpos+chi0)
+    print("Raw 3D number density ",laes.d['nbar'],flush=True)
     # Now we want to determine the sampling fraction to
     # get the right angular number density.
     ntarget,nbar = 387.4,[]
@@ -41,58 +62,48 @@ if __name__=="__main__":
         nobj   = laes.d['nkeep']
         nbar.append(nobj / (Lx*Ly))
     fsamp = ntarget / np.median(nbar)
-    # Generate a uniform random catalog.
-    # We offset the RA to eliminate negative RAs
-    # just to avoid a warning.
-    nran = 100000
-    ran  = {}
-    ran['RA' ] = rng.uniform(low=-Lx/2.,high=Lx/2.,size=nran) + Lx
-    ran['DEC'] = rng.uniform(low=-Ly/2.,high=Ly/2.,size=nran)
-    # apply mask.
-    rad2 = ( (ran['RA']-Lx)**2 + (ran['DEC'])**2 )*(np.pi/180.)**2
-    ran['RA' ] = ran['RA' ][rad2<diam**2/4]
-    ran['DEC'] = ran['DEC'][rad2<diam**2/4]
     # Now do the MC loop.
-    rval,wts,ngals = None,[],[]
+    rval,wxs,ngals = None,[],[]
     for i in range(256):
         # Generate the galaxies.
         offset = rng.uniform(low=-0.5,high=0.5,size=3)
         laes.select(diam,offset)
         dat        = {}
-        dat['RA' ] = laes.xpos*ichi + Lx
+        dat['RA' ] = laes.xpos*ichi
         dat['DEC'] = laes.ypos*ichi
-        # downsample
+        # Apply radial selection function.
         rand = rng.uniform(low=0,high=1,size=dat['RA'].size)
         ww   = np.nonzero( rand<fsamp )[0]
         dat['RA' ] = dat['RA' ][ww]
         dat['DEC'] = dat['DEC'][ww]
-        # apply mask.
-        rad2 = ( (dat['RA']-Lx)**2 + (dat['DEC'])**2 )*(np.pi/180.)**2
-        dat['RA' ] = dat['RA' ][rad2<diam**2/4]
-        dat['DEC'] = dat['DEC'][rad2<diam**2/4]
+        # Rotate the objects to the field center and apply mask.
+        nra,ndc    = rotate_to(dat['RA'],dat['DEC'],cra,cdc)
+        ww         = mask(nra,ndc)
+        dat['RA' ] = nra[ww]
+        dat['DEC'] = ndc[ww]
         # compute the clustering.
-        bins,wt = calc_wt(dat,ran)
-        rval    = chi0*np.sqrt(bins[:-1]*bins[1:])*np.pi/180.
-        wts.append(wt)
+        bins,wx = calc_wt(dat,ran)
+        rval    = chi0*np.sqrt( bins[:-1]*bins[1:] )*np.pi/180.
+        wxs.append(wx)
         ngals.append(dat['RA'].size)
-    wts  = np.array(wts)
-    wavg = np.mean(wts,axis=0)
-    werr = np.std( wts,axis=0)
-    wcor = np.corrcoef(wts,rowvar=False)
+    wxs  = np.array(wxs)
+    wavg = np.mean(wxs,axis=0)
+    werr = np.std( wxs,axis=0)
+    wcor = np.corrcoef(wxs,rowvar=False)
     navg = np.mean(np.array(ngals,dtype='float'))
     nerr = np.std( np.array(ngals,dtype='float'))
     # Now write out some results.
-    diam *= 180./np.pi
-    area  = np.pi * (diam/2)**2
     with open("mc_n419_wR.txt","w") as fout:
         fout.write("# Monte-Carlo calculation of wR using {:d} mocks.\n".\
-                   format(wts.shape[0]))
-        fout.write("# Field diameter is {:.2f}deg, area {:.2f}deg2.\n".\
-                   format(diam,area))
+                   format(wxs.shape[0]))
+        fout.write("# Field "+fname+"\n")
+        fout.write("# Centered on ({:.3f},{:.3f})\n".format(cra,cdc))
+        fout.write("# Number density is {:.3e}\n".format(laes.d['nbar']))
         fout.write("# Sampling by {:.3f} to get {:.1f} LAEs/deg2\n".\
                    format(fsamp,ntarget))
         fout.write("# Have {:.1f}+/-{:.2f} LAEs/field.\n".\
                    format(navg,nerr))
+        fout.write("# chi0={:f}Mpc/h.\n".format(chi0))
         fout.write("# Correlation matrix is:\n")
         for i in range(rval.size):
             outstr = "#"
