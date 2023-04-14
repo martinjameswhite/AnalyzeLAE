@@ -22,8 +22,8 @@ if __name__=="__main__":
     # Set the name of the field we'll work with and load
     # the mask, random catalog and radial selection fn.
     fname= "cosmos"
-    mask = SurveyMask('lae_survey_msk_N419.fits')
-    tt   = Table.read('lae_survey_ran_N419.fits')
+    mask = SurveyMask('lae_'+fname+'_msk_N419.fits')
+    tt   = Table.read('lae_'+fname+'_ran_N419.fits')
     # Set the center of the field.
     cra = np.median(tt['RA'])
     cdc = np.median(tt['DEC'])
