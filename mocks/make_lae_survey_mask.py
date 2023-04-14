@@ -8,6 +8,15 @@
 # Also contains a class that uses such a mask to return True
 # for objects within the survey footprint/mask.
 #
+# Extinction correction coefficients for the ODIN NB filters
+# a419 = 4.3238  # extinction correction for E(B-V)=1
+# a501 = 3.54013 # extinction correction for E(B-V)=1
+# a673 = 2.43846 # extinction correction for E(B-V)=1
+# Magnitudes  ; reddening corrected mags
+# m419=22.5-2.5*np.log10(od['flux_n419'])-a419*od['ebv']  # + 22.1069
+# m501=22.5-2.5*np.log10(od['flux_n501'])-a501*od['ebv']  # + 22.1069
+# m673=22.5-2.5*np.log10(od['flux_n673'])-a673*od['ebv']  # + 22.6585
+#
 #
 import numpy  as np
 import healpy as hp
@@ -27,7 +36,10 @@ def make_survey_mask(ran_fname,filter_name,nside=8192,is_nest=True):
     # Read RA/DEC from the file, restrict to those with observations
     # in the desired filter and generate a list of Healpix pixel numbers.
     ran   = Table.read(ran_fname)
-    ran   = ran[ ran['NOBS_'+filter_name]>0 ]
+    print(ran.keys())
+    ran   = ran[ ran['MASKBITS']==0 ]
+    #ran   = ran[ ran['allmask_'+filter_name.lower()]==0 ]
+    ran   = ran[ ran['NOBS_'+filter_name]>10 ]
     theta = np.radians(90.-ran['DEC'])
     phi   = np.radians(ran['RA'])
     pixs  = hp.ang2pix(nside,theta,phi,nest=is_nest)
@@ -37,7 +49,7 @@ def make_survey_mask(ran_fname,filter_name,nside=8192,is_nest=True):
     tt.meta["HPXNEST"] = is_nest
     tt.meta["COMMENT"] = r'Mask lists HPX pixels included in survey'
     # We also want a random file -- this could be downsampled.
-    rr = Table({'RA':ran['RA'][::10],'DEC':ran['DEC'][::10]})
+    rr = Table({'RA':ran['RA'][::15],'DEC':ran['DEC'][::15]})
     return( (tt,rr) )
     #
 
