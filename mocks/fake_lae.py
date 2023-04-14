@@ -100,6 +100,12 @@ class MockLAE:
         rr = self.rng.uniform(size=self.d['nobj'])
         self.bitmask[rr<bright_frac] |= 1
         #
+    def radial_select(self,dchis):
+        """Radial selection function, in chi-chi0."""
+        # For now select everything, using "dchi" as
+        # the only cut.
+        return(0*dchis+1.1)
+        #
     def select(self,diam,offset):
         """Select a small region of the box of diameter diam (radians)
         with the center of the box shifted by offset (fraction of box)."""
@@ -114,12 +120,15 @@ class MockLAE:
         xpos = self.periodic(gals['x'   ]+offset[0]*Lbox)
         ypos = self.periodic(gals['y'   ]+offset[1]*Lbox)
         zpos = self.periodic(gals['zred']+offset[2]*Lbox)
+        rnum = self.rng.uniform(size=zpos.size)
+        rsel = self.radial_select(zpos)
         in_survey = np.nonzero( (xpos>-0.5*Lside)&\
                                 (xpos< 0.5*Lside)&\
                                 (ypos>-0.5*Lside)&\
                                 (ypos< 0.5*Lside)&\
                                 (zpos>-0.5*depth)&\
-                                (zpos< 0.5*depth) )[0]
+                                (zpos< 0.5*depth)&\
+                                (rnum<rsel) )[0]
         # Store the results for later use.
         self.d['nkeep'] = len(in_survey)
         self.xpos = xpos[in_survey]
