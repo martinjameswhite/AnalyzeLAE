@@ -71,16 +71,22 @@ if __name__=="__main__":
         dat        = {}
         dat['RA' ] = laes.xpos*ichi
         dat['DEC'] = laes.ypos*ichi
+        dat['CHI'] = laes.zpos+chi0
         # Apply radial selection function.
         rand = rng.uniform(low=0,high=1,size=dat['RA'].size)
         ww   = np.nonzero( rand<fsamp )[0]
         dat['RA' ] = dat['RA' ][ww]
         dat['DEC'] = dat['DEC'][ww]
+        dat['CHI'] = dat['CHI'][ww]
         # Rotate the objects to the field center and apply mask.
         nra,ndc    = rotate_to(dat['RA'],dat['DEC'],cra,cdc)
         ww         = mask(nra,ndc)
         dat['RA' ] = nra[ww]
         dat['DEC'] = ndc[ww]
+        dat['CHI'] = dat['CHI'][ww]
+        # Here we would add line-of-sight downsampling if
+        # we wanted/needed it to match dN/dz.
+        pass
         # compute the clustering.
         bins,wx = calc_wt(dat,ran)
         rval    = chi0*np.sqrt( bins[:-1]*bins[1:] )*np.pi/180.
