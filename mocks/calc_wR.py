@@ -52,5 +52,5 @@ def calc_wt(dat,ran,bins=None):
     rr   = RR_c['npairs']*RR_c['weightavg']/nr/nr
     # and hence the angular correlation function.
     wt   = (dd-2*dr+rr)/(rr+1e-30)
-    return((bins,wt))
+    return((bb,wt))
     #
