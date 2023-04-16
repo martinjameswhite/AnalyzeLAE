@@ -100,7 +100,7 @@ class ThinShellWR:
         # Make a window function.
         self.yy   = np.linspace(0.0,self.delt,251)
         self.wind = np.zeros_like(self.yy)
-        chim      = np.linspace(cmin,cmax,301)
+        chim      = np.linspace(cmin,cmax,401)
         for i in range(self.yy.size):
             y2           = self.yy[i]/2.0
             win1         = np.interp(chim-y2,chi,phi,left=0,right=0)
