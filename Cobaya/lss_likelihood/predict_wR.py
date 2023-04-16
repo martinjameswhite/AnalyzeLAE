@@ -62,7 +62,7 @@ class NbodyCorrelationFunctions():
         ss  = np.array(self.mod['R'])
         x0  = Spline(ss,np.array(mock['xi0']))
         x2  = Spline(ss,np.array(mock['xi2']))
-        x4  = np.zeros_like(ss)
+        x4  = Spline(ss,np.zeros_like(ss))
         # Return only xi_{gg}, set the others to zero.
         xgg = x0(sval)*1.0 + x2(sval)*legendre(2)(uval) + x4(sval)*legendre(4)(uval)
         xgm = np.zeros_like(sval)
