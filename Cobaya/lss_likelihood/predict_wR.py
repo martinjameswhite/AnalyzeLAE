@@ -87,6 +87,9 @@ class ThinShellWR:
         # Store the midpoint and shell width.
         self.chi0 = chibar
         self.delt = Delta
+        # Make a window function.
+        self.yy = np.linspace(0.0,self.delt,250)
+        self.wind=(self.delt-self.yy)/self.delt**2
         # Copy the correlation function model,
         # e.g. LPTCorrelationFunction(klin,plin*Dz**2)
         self.xiofs = XiModel
@@ -98,10 +101,9 @@ class ThinShellWR:
         wR = np.zeros(len(Rs),dtype='float')
         yy = np.linspace(0.0,self.delt,250)
         for i,RR in enumerate(Rs):
-            sval  = np.sqrt(RR**2 + yy**2)
-            uval  = yy/sval
+            sval  = np.sqrt(RR**2 + self.yy**2)
+            uval  = self.yy/sval
             xisu  = self.xismu(sval,uval,pars)
-            wR[i] = simpson((self.delt-yy)*xisu,x=yy)
-        wR *= 2/self.delt**2
+            wR[i] = 2*simpson(self.wind*xisu,x=self.yy)
         return(wR)
     #
