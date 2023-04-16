@@ -54,7 +54,7 @@ class NbodyCorrelationFunctions():
     def __init__(self,json_file):
         """Reads the tables from a JSON file."""
         self.mod = json.load(open(json_file,"r"))
-    def __call__(self,ss,mu,pars):
+    def __call__(self,sval,uval,pars):
         """Reads the three xi(s,mu).  Returns s,xi_gg,xi_gm,xi_mm.
         In this case 'pars' is an integer index, giving the model number."""
         # We will approximate xi(s,mu) through the multipole expansion.
@@ -64,9 +64,9 @@ class NbodyCorrelationFunctions():
         x2  = Spline(ss,np.array(mock['xi2']))
         x4  = np.zeros_like(ss)
         # Return only xi_{gg}, set the others to zero.
-        xgg = x0(ss)*1.0 + x2(ss)*legendre(2)(mu) + x4(ss)*legendre(4)(mu)
-        xgm = np.zeros_like(ss)
-        xmm = np.zeros_like(ss)
+        xgg = x0(sval)*1.0 + x2(sval)*legendre(2)(uval) + x4(sval)*legendre(4)(uval)
+        xgm = np.zeros_like(sval)
+        xmm = np.zeros_like(sval)
         return((xgg,xgm,xmm))
         #
 
