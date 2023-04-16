@@ -1,7 +1,8 @@
 #
 # Code to compute angular power spectra for a "thin shell" survey
 #
-import numpy       as np
+import numpy as np
+import json
 import sys
 
 
