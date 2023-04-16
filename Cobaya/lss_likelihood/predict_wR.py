@@ -106,7 +106,7 @@ class ThinShellWR:
             win1         = np.interp(chim-y2,chi,phi,left=0,right=0)
             win2         = np.interp(chim+y2,chi,phi,left=0,right=0)
             self.wind[i] = simpson(win1*win2,x=chim)
-        self.wind = (self.delt-self.yy)/self.delt**2
+        ## Analytic: self.wind = (self.delt-self.yy)/self.delt**2
         # Copy the correlation function model,
         # e.g. LPTCorrelationFunction(klin,plin*Dz**2)
         self.xiofs = XiModel
