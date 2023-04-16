@@ -19,20 +19,21 @@ def calc_wt(dat,ran,bins=None):
     nthreads = int( os.getenv('OMP_NUM_THREADS','1') )
     Nd,Nr    = len(dat['RA']),len(ran['RA'])
     # RA and DEC should be in degrees, and all arrays should
-    # be the same type.  Ensure this now.
+    # be the same type and it seems as if they need to be
+    # 'float' and not e.g. 'float32'.  Ensure this now.
     pp  = 'pair_product'
-    dra = dat['RA' ].astype('float32')
-    ddc = dat['DEC'].astype('float32')
+    dra = dat['RA' ].astype('float')
+    ddc = dat['DEC'].astype('float')
     if not 'WT' in dat.keys():
-        dwt = np.ones_like(dat['RA']).astype('float32')
+        dwt = np.ones_like(dat['RA']).astype('float')
     else:
-        dwt = dat['WT'].astype('float32')
-    rra = ran['RA' ].astype('float32')
-    rdc = ran['DEC'].astype('float32')
+        dwt = dat['WT'].astype('float')
+    rra = ran['RA' ].astype('float')
+    rdc = ran['DEC'].astype('float')
     if not 'WT' in ran.keys():
-        rwt = np.ones_like(ran['RA']).astype('float32')
+        rwt = np.ones_like(ran['RA']).astype('float')
     else:
-        rwt = ran['WT'].astype('float32')
+        rwt = ran['WT'].astype('float')
     # Bin edges are specified in degrees, if nothing
     # is passed in, do log-spaced bins.
     if bins is None:
