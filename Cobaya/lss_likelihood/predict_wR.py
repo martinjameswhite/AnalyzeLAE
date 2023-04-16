@@ -96,7 +96,7 @@ class ThinShellWR:
             phi[chi<chibar-Delta/2] = 0
             phi[chi>chibar+Delta/2] = 0
         # Normalize phi(chi).
-        phi /= simspon(phi,x=chi)
+        phi /= simpson(phi,x=chi)
         # Make a window function.
         self.yy   = np.linspace(0.0,self.delt,251)
         self.wind = np.zeros_like(self.yy)
