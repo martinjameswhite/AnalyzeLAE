@@ -87,8 +87,25 @@ class ThinShellWR:
         # Store the midpoint and shell width.
         self.chi0 = chibar
         self.delt = Delta
+        # Fake phi(chi).
+        if True:
+            cmin = chibar - Delta/2 - 100
+            cmax = chibar + Delta/2 + 100
+            chi  = np.linspace(cmin,cmax,201)
+            phi  = np.zeros_like(chi) + 1/Delta
+            phi[chi<chibar-Delta/2] = 0
+            phi[chi>chibar+Delta/2] = 0
+        # Normalize phi(chi).
+        phi /= simspon(phi,x=chi)
         # Make a window function.
-        self.yy   = np.linspace(0.0,self.delt,250)
+        self.yy   = np.linspace(0.0,self.delt,251)
+        self.wind = np.zeros_like(self.yy)
+        chim      = np.linspace(cmin,cmax,301)
+        for i in range(self.yy.size):
+            y2           = self.yy[i]/2.0
+            win1         = np.interp(chim-y2,chi,phi,left=0,right=0)
+            win2         = np.interp(chim+y2,chi,phi,left=0,right=0)
+            self.wind[i] = simps(win1*win2,x=chim)
         self.wind = (self.delt-self.yy)/self.delt**2
         # Copy the correlation function model,
         # e.g. LPTCorrelationFunction(klin,plin*Dz**2)
@@ -99,7 +116,6 @@ class ThinShellWR:
     def __call__(self,Rs,pars):
         """Computes the thin-shell w_theta(R)"""
         wR = np.zeros(len(Rs),dtype='float')
-        yy = np.linspace(0.0,self.delt,250)
         for i,RR in enumerate(Rs):
             sval  = np.sqrt(RR**2 + self.yy**2)
             uval  = self.yy/sval
