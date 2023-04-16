@@ -88,8 +88,8 @@ class ThinShellWR:
         self.chi0 = chibar
         self.delt = Delta
         # Make a window function.
-        self.yy = np.linspace(0.0,self.delt,250)
-        self.wind=(self.delt-self.yy)/self.delt**2
+        self.yy   = np.linspace(0.0,self.delt,250)
+        self.wind = (self.delt-self.yy)/self.delt**2
         # Copy the correlation function model,
         # e.g. LPTCorrelationFunction(klin,plin*Dz**2)
         self.xiofs = XiModel
