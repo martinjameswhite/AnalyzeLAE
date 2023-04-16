@@ -37,8 +37,8 @@ def calc_wt(dat,ran,bins=None):
     # Bin edges are specified in degrees, if nothing
     # is passed in, do log-spaced bins.
     if bins is None:
-        Nbin = 5
-        bins = np.logspace(-1.5,-0.5,Nbin+1)
+        Nbin = 8
+        bins = np.geomspace(0.01,0.3,Nbin+1)
     # do the pair counting, then convert to w(theta).
     DD = Pairs(1,nthreads,bins,RA1=dra,DEC1=ddc,weights1=dwt,weight_type=pp)
     RR = Pairs(1,nthreads,bins,RA1=rra,DEC1=rdc,weights1=rwt,weight_type=pp)
