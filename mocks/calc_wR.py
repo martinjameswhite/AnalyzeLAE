@@ -18,7 +18,7 @@ def calc_wt(dat,ran,bins=None):
     # Get number of threads, datas and randoms.
     nt   = int(os.getenv('OMP_NUM_THREADS',1))
     pp   = 'pair_product'
-    # Bin edges are specified in Mpc/h, if nothing
+    # Bin edges are specified in degrees, if nothing
     # is passed in, do log-spaced bins.
     if bins is None:
         Nbin = 10
