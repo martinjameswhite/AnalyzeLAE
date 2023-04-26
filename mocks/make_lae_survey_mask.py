@@ -38,7 +38,7 @@ def make_survey_mask(ran_fname,filter_name,nside=8192,is_nest=True):
     ran   = Table.read(ran_fname)
     print(ran.keys())
     ran   = ran[ ran['MASKBITS']==0 ]
-    #ran   = ran[ ran['allmask_'+filter_name.lower()]==0 ]
+    ran   = ran[ ran['IN_ARJUN_MASK']==False ]
     ran   = ran[ ran['NOBS_'+filter_name]>10 ]
     theta = np.radians(90.-ran['DEC'])
     phi   = np.radians(ran['RA'])
