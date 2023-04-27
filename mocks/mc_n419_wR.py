@@ -99,7 +99,7 @@ if __name__=="__main__":
     navg = np.mean(np.array(ngals,dtype='float'))
     nerr = np.std( np.array(ngals,dtype='float'))
     # Now write out some results.
-    with open("mc_n419_wR.txt","w") as fout:
+    with open("mc_{:s}_n419_wR.txt".format(fname),"w") as fout:
         fout.write("# Monte-Carlo calculation of wR using {:d} mocks.\n".\
                    format(wxs.shape[0]))
         fout.write("# Field "+fname+"\n")
