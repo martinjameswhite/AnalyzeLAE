@@ -48,7 +48,7 @@ hodkeys = ['logM_cut','logM1','sigma','kappa','alpha']
 plateau = np.log10(5.0)
 dats = []
 for lgMcut in [11.50,11.75,12.00]:
-    for sigm in [1.0]:
+    for sigm in [0.5]:
         HOD_params['LRG_params']['logM_cut'] = lgMcut
         HOD_params['LRG_params']['logM1'   ] = lgMcut + plateau
         HOD_params['LRG_params']['sigma'   ] = sigm
