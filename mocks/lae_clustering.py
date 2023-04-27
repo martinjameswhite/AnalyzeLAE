@@ -82,9 +82,13 @@ for lgMcut in [11.50,11.75,12.00]:
                      'pk0':pk0.tolist(),'pk2':pk2.tolist()})
 outdict = {}
 for k in simkeys: outdict[k]=meta[k]
+outdict['in_red' ] = want_rsd
 outdict['R'      ] = Rcen.tolist()
 outdict['k'      ] = kk.tolist()
 outdict['hodkeys'] = hodkeys
 outdict['mocks'  ] = dats
-with open("lae_clustering.json","w") as fout:
+outsuf = 's' if want_rsd else 'r'
+outsim = sim_params['sim_name']
+outsim = outsim[outsim.find("_c0"):] + '_'
+with open("lae_clustering"+outsim+outsuf+".json","w") as fout:
     json.dump(outdict,fout,indent=2)
