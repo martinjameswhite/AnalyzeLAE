@@ -14,8 +14,10 @@ class MockLAE:
     # We may want to do a better job of holding the information in
     # this class.  Right now it's not very well thought through what is
     # kept internally vs. what is passed to each method.
-    def __init__(self,yaml_file,chi0,dchi):
+    def __init__(self,yaml_file,chi0,sfn_fname):
         """Set up the class."""
+        # Load the selection function; 3 columns: z, chi, p(chi).
+        self.sfn = np.loadtxt(sfn_fname)
         # Load the config file and parse in relevant parameters
         config          = yaml.safe_load(open(yaml_file))
         self.sim_params = config['sim_params']
@@ -34,7 +36,6 @@ class MockLAE:
         # Save some configuration parameters for later use.
         self.d = {}
         self.d['chi0'] = chi0
-        self.d['dchi'] = dchi
         self.d['zbox'] = self.meta['Redshift']
         self.d['abox'] = self.meta['ScaleFactor']
         self.d['Lbox'] = self.meta['BoxSizeHMpc']
@@ -100,11 +101,12 @@ class MockLAE:
         rr = self.rng.uniform(size=self.d['nobj'])
         self.bitmask[rr<bright_frac] |= 1
         #
-    def radial_select(self,dchis):
-        """Radial selection function, in chi-chi0."""
-        # For now select everything, using "dchi" as
-        # the only cut.
-        return(0*dchis+1.1)
+    def radial_select(self,chis):
+        """Radial selection function, in chi."""
+        chiv = self.sfn[:,1]
+        pchi = self.sfn[:,2]
+        prob = np.interp(chis,chiv,pchi,left=0,right=0)
+        return(prob)
         #
     def select(self,diam,offset):
         """Select a small region of the box of diameter diam (radians)
@@ -112,8 +114,8 @@ class MockLAE:
         # Also, at this point we should implement a z-dependent selection
         # function, but for now I'll use a hard zcut.
         Lbox  = self.d['Lbox']
-        Lside = diam * self.d['chi0']
-        depth = self.d['dchi']
+        chi0  = self.d['chi0']
+        Lside = diam * chi0
         gals  = self.laes['LRG']
         self.d['Lside'] = Lside
         # Shift the center of the box and select objects.
@@ -121,13 +123,11 @@ class MockLAE:
         ypos = self.periodic(gals['y'   ]+offset[1]*Lbox)
         zpos = self.periodic(gals['zred']+offset[2]*Lbox)
         rnum = self.rng.uniform(size=zpos.size)
-        rsel = self.radial_select(zpos)
+        rsel = self.radial_select(zpos+chi0)
         in_survey = np.nonzero( (xpos>-0.5*Lside)&\
                                 (xpos< 0.5*Lside)&\
                                 (ypos>-0.5*Lside)&\
                                 (ypos< 0.5*Lside)&\
-                                (zpos>-0.5*depth)&\
-                                (zpos< 0.5*depth)&\
                                 (rnum<rsel) )[0]
         # Store the results for later use.
         self.d['nkeep'] = len(in_survey)
@@ -200,7 +200,7 @@ class MockLAE:
 if __name__=="__main__":
     Nside  = 512
     diam   = 3.2 * np.pi/180.
-    laes   = MockLAE('lae_base.yaml',4385.,30.)
+    laes   = MockLAE('lae_base.yaml',4385.,'sfn.txt')
     params = {'logM_cut':11.75,'logM1':11.75+np.log10(5.),\
               'sigma':0.66,'kappa':0.33,'alpha':0.50}
     laes.set_hod(params)
