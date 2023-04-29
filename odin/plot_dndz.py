@@ -34,7 +34,7 @@ def plot_filter(filt_name,fname="cosmos"):
     carr = chi0+dcdz*(zarr-z0)
     pchi = np.exp(-np.abs( (zarr-z0)/(dz) )**6 )
     # Write the selection function to file.
-    with open("lae_"+fname+"_sfn_"+filt_name+".txt","w") as fout:
+    with open("lae_"+fname+"_"+filt_name+"_sfn.txt","w") as fout:
         fout.write("# Radial selection function.\n")
         fout.write("# "+fname+", "+filt_name+"\n")
         fout.write("# {:>8s} {:>12s} {:>12s}\n".format("z","chi[Mpc/h]","pchi"))
