@@ -82,23 +82,21 @@ class NbodyCorrelationFunctions():
 class ThinShellWR:
     # Computes the thin-shell expression for w_theta(R).
     #
-    def __init__(self,XiModel,chibar,Delta):
+    def __init__(self,XiModel,chibar,sfn_fname):
         """Initialize the class."""
-        # Store the midpoint and shell width.
+        # Store the midpoint.
         self.chi0 = chibar
-        self.delt = Delta
-        # Fake phi(chi).
-        if True:
-            cmin = chibar - Delta/2 - 100
-            cmax = chibar + Delta/2 + 100
-            chi  = np.linspace(cmin,cmax,201)
-            phi  = np.zeros_like(chi) + 1/Delta
-            phi[chi<chibar-Delta/2] = 0
-            phi[chi>chibar+Delta/2] = 0
+        # Load the selection function (z, chi, pchi) and
+        # extract the fields.
+        sfn  = np.loadtxt(sfn_fname)
+        chi  = sfn[:,1]
+        phi  = sfn[:,2]
+        cmin = np.min(chi)
+        cmax = np.max(chi)
         # Normalize phi(chi).
         phi /= simpson(phi,x=chi)
         # Make a window function.
-        self.yy   = np.linspace(0.0,self.delt,251)
+        self.yy   = np.linspace(0.0,cmax-cmin,251)
         self.wind = np.zeros_like(self.yy)
         chim      = np.linspace(cmin,cmax,401)
         for i in range(self.yy.size):
