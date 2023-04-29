@@ -21,9 +21,10 @@ if __name__=="__main__":
     rng    = np.random.default_rng(1)
     # Set the name of the field we'll work with and load
     # the mask, random catalog and radial selection fn.
-    fname= "cosmos"
-    mask = SurveyMask('lae_'+fname+'_msk_N419.fits')
-    tt   = Table.read('lae_'+fname+'_ran_N419.fits')
+    fname= "cosmos_N419"
+    sfn  = 'lae_'+fname+'_sfn.txt'
+    mask = SurveyMask('lae_'+fname+'_msk.fits')
+    tt   = Table.read('lae_'+fname+'_ran.fits')
     # Set the center of the field.
     cra = np.median(tt['RA'])
     cdc = np.median(tt['DEC'])
@@ -34,8 +35,7 @@ if __name__=="__main__":
     ran['DEC'] = tt['DEC'][ww]
     print("Random size ",len(ran['RA']),flush=True)
     # Define the mock catalog, shell and HOD.
-    # 16  11.75  12.45   0.50   0.33   0.50   0.10   8.33e-02
-    laes   = MockLAE('lae_n419.yaml',3979.,33.)
+    laes   = MockLAE('lae_n419.yaml',3979.,sfn)
     params = {'logM_cut':11.75,'logM1':11.75+np.log10(5.),\
               'sigma':0.50,'kappa':0.33,'alpha':0.50}
     laes.set_hod(params)
@@ -99,7 +99,7 @@ if __name__=="__main__":
     navg = np.mean(np.array(ngals,dtype='float'))
     nerr = np.std( np.array(ngals,dtype='float'))
     # Now write out some results.
-    with open("mc_{:s}_n419_wR.txt".format(fname),"w") as fout:
+    with open("mc_{:s}_wR.txt".format(fname),"w") as fout:
         fout.write("# Monte-Carlo calculation of wR using {:d} mocks.\n".\
                    format(wxs.shape[0]))
         fout.write("# Field "+fname+"\n")
