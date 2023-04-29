@@ -62,6 +62,10 @@ class SurveyMask:
         self.nside = mskd.meta["HPXNSID"]
         self.nest  = mskd.meta["HPXNEST"]
         self.pixs  = mskd["HPXPIXEL"]
+    def area(self):
+        """Returns the in_mask area in deg2."""
+        apix = hp.nside2pixarea(self.nside,degrees=True)
+        return(len(self.pixs)*apix)
     def __call__(self,ras,decs):
         """Returns a boolean array of whether the points pass the mask,
         with the points given by (RA,DEC) in degrees."""
