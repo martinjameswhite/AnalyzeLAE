@@ -82,6 +82,6 @@ if __name__=="__main__":
     #
     tt,rr = make_survey_mask(ran_fname,filter_name)
     #
-    tt.write("lae_survey_msk_{:s}.fits".format(filter_name),overwrite=True)
-    rr.write("lae_survey_ran_{:s}.fits".format(filter_name),overwrite=True)
+    tt.write("lae_survey_{:s}_msk.fits".format(filter_name),overwrite=True)
+    rr.write("lae_survey_{:s}_ran.fits".format(filter_name),overwrite=True)
     #
