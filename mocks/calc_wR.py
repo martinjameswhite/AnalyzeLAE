@@ -22,7 +22,7 @@ def calc_wt(dat,ran,bins=None):
     # is passed in, do log-spaced bins.
     if bins is None:
         Nbin = 10
-        bb   = np.geomspace(0.005,0.5,Nbin+1)
+        bb   = np.geomspace(0.006,0.3,Nbin+1)
     else:
         bb   = bins
     # RA and DEC should be in degrees, and all arrays should
