@@ -28,11 +28,13 @@ from   astropy.table import Table
 
 
 
-def make_survey_mask(ran_fname,filter_name,nside=8192,is_nest=True):
+def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
     """Generate an astropy Table of the survey (inclusion)
     mask from the coordinates read from a file of randoms.
     We assume the file is large enough that Poisson fluctuations
-    can be entirely neglected."""
+    can be entirely neglected.
+    An additional 'cut' is applied that all points lie within
+    cut[2] degrees of RA/DEC=cut[0]/cut[1] (deg)."""
     # Read RA/DEC from the file, restrict to those with observations
     # in the desired filter and generate a list of Healpix pixel numbers.
     ran   = Table.read(ran_fname)
@@ -40,8 +42,23 @@ def make_survey_mask(ran_fname,filter_name,nside=8192,is_nest=True):
     ran   = ran[ ran['MASKBITS']==0 ]
     ran   = ran[ ran['IN_ARJUN_MASK']==False ]
     ran   = ran[ ran['NOBS_'+filter_name]>10 ]
+    # Apply the circle cut.
+    cosmin= np.cos(np.radians(cut[2]))
+    theta = np.radians(90-cut[1])
+    phi   = np.radians(cut[0])
+    cnhat = np.array([np.sin(theta)*np.cos(phi),\
+                      np.sin(theta)*np.sin(phi),\
+                      np.cos(theta)])
     theta = np.radians(90.-ran['DEC'])
     phi   = np.radians(ran['RA'])
+    nhat  = np.zeros( (theta.size,3) )
+    nhat[:,0] = np.sin(theta)*np.cos(phi)
+    nhat[:,1] = np.sin(theta)*np.sin(phi)
+    nhat[:,2] = np.cos(theta)
+    cdist = np.dot(nhat,cnhat)
+    theta = theta[ cdist>cosmin ]
+    phi   = phi[   cdist>cosmin ]
+    # and work out the HEALPIX pixel numbers:
     pixs  = hp.ang2pix(nside,theta,phi,nest=is_nest)
     # and generate a table containing the information to be returned.
     tt = Table({"HPXPIXEL":np.unique(pixs)})
@@ -84,7 +101,11 @@ if __name__=="__main__":
     ran_fname   = sys.argv[1]
     filter_name = sys.argv[2].upper()
     #
-    tt,rr = make_survey_mask(ran_fname,filter_name)
+    cut = [0.,0.,180.]
+    if ran_fname.find('cosmos')>0:
+        cut = [150.11,2.173,1.9]
+    #
+    tt,rr = make_survey_mask(ran_fname,filter_name,cut)
     #
     tt.write("lae_survey_{:s}_msk.fits".format(filter_name),overwrite=True)
     rr.write("lae_survey_{:s}_ran.fits".format(filter_name),overwrite=True)
