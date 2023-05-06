@@ -177,7 +177,7 @@ if __name__=="__main__":
             fout.write("# {:>10s} {:>15s} {:>15s}\n".\
                        format("k[h/Mpc]","ba","bx","Pmm"))
             for i in range(kk.size):
-                fout.write("{:12.4e} {:15.5e} {:15.5e}\n".\
+                fout.write("{:12.4e} {:15.5e} {:15.5e} {:15.5e}\n".\
                         format(kk[i],bka[i],bkx[i],pkmm[i]))
     #
     if True:
@@ -213,6 +213,6 @@ if __name__=="__main__":
             fout.write("# {:>10s} {:>15s} {:>15s}\n".\
                        format("r[Mpc/h]","ba","bx","xi_mm"))
             for i in range(Rcen.size):
-                fout.write("{:12.4e} {:15.5e} {:15.5e}\n".\
+                fout.write("{:12.4e} {:15.5e} {:15.5e} {:15.5e}\n".\
                         format(Rcen[i],bra[i],brx[i],ximm[i]))
     #
