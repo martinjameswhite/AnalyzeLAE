@@ -174,7 +174,7 @@ if __name__=="__main__":
             fout.write("# Real-space Fourier biases.\n")
             fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
-            fout.write("# {:>10s} {:>15s} {:>15s}\n".\
+            fout.write("# {:>10s} {:>15s} {:>15s} {:>15s}\n".\
                        format("k[h/Mpc]","ba","bx","Pmm"))
             for i in range(kk.size):
                 fout.write("{:12.4e} {:15.5e} {:15.5e} {:15.5e}\n".\
@@ -210,7 +210,7 @@ if __name__=="__main__":
             fout.write("# Real-space configuration biases.\n")
             fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
-            fout.write("# {:>10s} {:>15s} {:>15s}\n".\
+            fout.write("# {:>10s} {:>15s} {:>15s} {:>15s}\n".\
                        format("r[Mpc/h]","ba","bx","xi_mm"))
             for i in range(Rcen.size):
                 fout.write("{:12.4e} {:15.5e} {:15.5e} {:15.5e}\n".\
