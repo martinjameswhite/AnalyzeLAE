@@ -91,15 +91,13 @@ for lgMcut in lgMc_list:
             kk,pk0,pk2 = np.zeros(1),np.zeros(1),np.zeros(1)
         #
         if False: # Old code.
-            pk3d  = newBall.compute_power(mock_dict,nbins_k=50,nbins_mu=11,\
-                      k_hMpc_max=0.5,logk=False,num_cells=512,\
+            pk3d = newBall.compute_power(mock_dict,nbins_k=50,nbins_mu=11,\
+                      k_hMpc_max=0.5,logk=False,poles=[0,2],num_cells=512,\
                       paste='TSC',compensated=True,interlaced=True)
-            mu    = pk3d['mu_binc']
-            dmu   = 1.0/len(mu)
-            kk    = pk3d['k_binc']
-            pkmu  = pk3d['LRG_LRG']
-            pk0   = (2*0+1)*np.dot(pkmu,1.0*(0*mu**2+1))*dmu
-            pk2   = (2*2+1)*np.dot(pkmu,0.5*(3*mu**2-1))*dmu
+            kk   = pk3d['k_binc']
+            pkl  = pk3d['LRG_LRG_ell']
+            pk0  = pkl[0,:,0]
+            pk2  = pkl[1,:,0]
         #
         if nobj>maxobj:
             print("Have nobj=",nobj," downsampling to ",maxobj)
