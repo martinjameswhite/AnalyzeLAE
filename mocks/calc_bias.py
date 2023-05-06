@@ -189,12 +189,14 @@ if __name__=="__main__":
             samp = 'LRG'
             for k in ['x','y','z','vx','vy','vz','mass','id']:
                 mock_dict[samp][k] = mock_dict[samp][k][inds]
+            nobj = maxobj
         if ndm>maxobj:
             print("Have ndm=",ndm," downsampling to ",maxobj,flush=True)
             inds = rng.choice(ndm,size=maxobj,replace=False)
             samp = 'matter'
             for k in ['x','y','z']:
                 mock_dict[samp][k] = mock_dict[samp][k][inds]
+            ndm = maxobj
         xi3d = newBall.compute_multipole(mock_dict,rpbins,pimax,dpi)
         xiell= xi3d['LRG_LRG']
         xigg = xiell[1*len(Rcen):2*len(Rcen)]
@@ -209,6 +211,7 @@ if __name__=="__main__":
             fout.write("# Real-space configuration biases.\n")
             fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
+            fout.write("# Nobj={:d}, Ndm={:d}\n".format(nobj,ndm))
             fout.write("# {:>10s} {:>15s} {:>15s} {:>15s}\n".\
                        format("r[Mpc/h]","ba","bx","xi_mm"))
             for i in range(Rcen.size):
