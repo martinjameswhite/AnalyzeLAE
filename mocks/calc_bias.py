@@ -41,7 +41,7 @@ def load_matter(sim_dir,Lbox,z,n_chunks,N_parts,f_down,type_AB='A'):
     # global indices to keep
     inds_keep = random.sample(range(N_all), N_all//f_down)
     N_keep = len(inds_keep)
-    print("N_keep", N_keep)
+    print("N_keep", N_keep, flush=True)
     pos_down = np.zeros((N_keep, 3), dtype=np.float32)
     vel_down = np.zeros((N_keep, 3), dtype=np.float32)
 
@@ -59,11 +59,11 @@ def load_matter(sim_dir,Lbox,z,n_chunks,N_parts,f_down,type_AB='A'):
 
         halo_data = (asdf.open(fn_halo)['data'])['rvint']
         pos_halo, vel_halo = unpack_rvint(halo_data, Lbox, float_dtype=np.float32, velout=None)
-        print("pos_halo = ", pos_halo[:5])
+        print("pos_halo = ", pos_halo[:5],flush=True)
 
         field_data = (asdf.open(fn_field)['data'])['rvint']
         pos_field, vel_field = unpack_rvint(field_data, Lbox, float_dtype=np.float32, velout=None)
-        print("pos_field = ", pos_field[:5])
+        print("pos_field = ", pos_field[:5],flush=True)
 
         # stack halo and field particles
         pos_both = np.vstack((pos_halo, pos_field))
@@ -74,7 +74,7 @@ def load_matter(sim_dir,Lbox,z,n_chunks,N_parts,f_down,type_AB='A'):
         count += len(inds_keep_this)
         del halo_data, pos_halo, vel_halo, field_data, pos_field, vel_field
         gc.collect()
-    print("these two must be the same", count, pos_down.shape[0])
+    print("these two must be the same", count, pos_down.shape[0],flush=True)
     pos_down = pos_down[:count]
     vel_down = vel_down[:count]
     return pos_down, vel_down
