@@ -154,19 +154,17 @@ if __name__=="__main__":
         # Just something to put in the file.
         kk,pk0,pk2 = np.zeros(1),np.zeros(1),np.zeros(1)
     #
-    if False:
-        pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=3,\
-                  k_hMpc_max=0.5,logk=False,num_cells=512,\
+    if True:
+        #pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=3,\
+        #          k_hMpc_max=0.5,logk=False,num_cells=512,\
+        #          paste='TSC',compensated=True,interlaced=True)
+        pk3d  = newBall.compute_power(mock_dict,nbins_k=50,nbins_mu=3,\
+                  k_hMpc_max=0.5,logk=False,poles=[0],num_cells=512,\
                   paste='TSC',compensated=True,interlaced=True)
-        mu    = pk3d['mu_binc']
-        dmu   = 1.0/len(mu)
         kk    = pk3d['k_binc']
-        pkmu  = pk3d['LRG_LRG']
-        pkgg  = (2*0+1)*np.dot(pkmu,1.0*(0*mu**2+1))*dmu
-        pkmu  = pk3d['LRG_matter']
-        pkgm  = (2*0+1)*np.dot(pkmu,1.0*(0*mu**2+1))*dmu
-        pkmu  = pk3d['matter_matter']
-        pkmm  = (2*0+1)*np.dot(pkmu,1.0*(0*mu**2+1))*dmu
+        pkgg  = pk3d['LRG_LRG_ell'][0,:,0]
+        pkgm  = pk3d['LRG_matter_ell'][0,:,0]
+        pkmm  = pk3d['matter_matter_ell'][0,:,0]
         bka   = np.sqrt(pkgg/pkmm)
         bkx   = pkgm/pkmm
         #
@@ -174,13 +172,14 @@ if __name__=="__main__":
             fout.write("# Real-space Fourier biases.\n")
             fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
+            fout.write("# Nobj={:d}, Ndm={:d}\n".format(nobj,ndm))
             fout.write("# {:>10s} {:>15s} {:>15s} {:>15s}\n".\
                        format("k[h/Mpc]","ba","bx","Pmm"))
             for i in range(kk.size):
                 fout.write("{:12.4e} {:15.5e} {:15.5e} {:15.5e}\n".\
                         format(kk[i],bka[i],bkx[i],pkmm[i]))
     #
-    if True:
+    if False:
         # This is very slow if there are many objects and
         # the maximum lag is too large.
         maxobj  = 8000000 # Should be an integer.
