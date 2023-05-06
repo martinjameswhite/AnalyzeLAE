@@ -91,7 +91,7 @@ for lgMcut in lgMc_list:
             kk,pk0,pk2 = np.zeros(1),np.zeros(1),np.zeros(1)
         #
         if False: # Old code.
-            pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=11,\
+            pk3d  = newBall.compute_power(mock_dict,nbins_k=50,nbins_mu=11,\
                       k_hMpc_max=0.5,logk=False,num_cells=512,\
                       paste='TSC',compensated=True,interlaced=True)
             mu    = pk3d['mu_binc']
