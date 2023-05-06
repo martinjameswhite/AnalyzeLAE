@@ -172,7 +172,7 @@ if __name__=="__main__":
         #
         with open("lae_bk.txt","w") as fout:
             fout.write("# Real-space Fourier biases.\n")
-            fout.write("# "+sim_name+"\n")
+            fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
             fout.write("# {:>10s} {:>15s} {:>15s}\n".\
                        format("k[h/Mpc]","ba","bx","Pmm"))
@@ -190,6 +190,7 @@ if __name__=="__main__":
             samp = 'LRG'
             for k in ['x','y','z','vx','vy','vz','mass','id']:
                 mock_dict[samp][k] = mock_dict[samp][k][inds]
+        if ndm>maxobj:
             print("Have ndm=",ndm," downsampling to ",maxobj,flush=True)
             inds = rng.choice(ndm,size=maxobj,replace=False)
             samp = 'matter'
@@ -207,7 +208,7 @@ if __name__=="__main__":
         #
         with open("lae_br.txt","w") as fout:
             fout.write("# Real-space configuration biases.\n")
-            fout.write("# "+sim_name+"\n")
+            fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
             fout.write("# {:>10s} {:>15s} {:>15s}\n".\
                        format("r[Mpc/h]","ba","bx","xi_mm"))
