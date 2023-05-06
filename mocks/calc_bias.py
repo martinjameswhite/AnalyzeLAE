@@ -34,9 +34,9 @@ def load_matter(sim_dir,Lbox,z,n_chunks,N_parts,f_down,type_AB='A'):
         N_file[i_chunk] = N_this
         N_all += N_this
     gc.collect()
-    print("offsets", N_offset, flush=True)
-    print("per file", N_file, flush=True)
-    print("all the particles in the halo and field files", N_all, flush=True)
+    #print("offsets", N_offset, flush=True)
+    #print("per file", N_file, flush=True)
+    print("Total particles in halo and field files: ",N_all,flush=True)
 
     # global indices to keep
     inds_keep = random.sample(range(N_all), N_all//f_down)
@@ -48,7 +48,7 @@ def load_matter(sim_dir,Lbox,z,n_chunks,N_parts,f_down,type_AB='A'):
     # load the matter particles
     count = 0
     for i_chunk in range(n_chunks):
-        print(i_chunk, n_chunks)
+        print("Reading ",i_chunk," of ",n_chunks,flush=True)
         # indices to keep in this chunk
         inds_keep_this = inds_keep - N_offset[i_chunk]
         inds_keep_this = inds_keep_this[(inds_keep_this >= 0) & (inds_keep_this < N_file[i_chunk])]
@@ -59,11 +59,11 @@ def load_matter(sim_dir,Lbox,z,n_chunks,N_parts,f_down,type_AB='A'):
 
         halo_data = (asdf.open(fn_halo)['data'])['rvint']
         pos_halo, vel_halo = unpack_rvint(halo_data, Lbox, float_dtype=np.float32, velout=None)
-        print("pos_halo = ", pos_halo[:5],flush=True)
+        #print("pos_halo = ", pos_halo[:5],flush=True)
 
         field_data = (asdf.open(fn_field)['data'])['rvint']
         pos_field, vel_field = unpack_rvint(field_data, Lbox, float_dtype=np.float32, velout=None)
-        print("pos_field = ", pos_field[:5],flush=True)
+        #print("pos_field = ", pos_field[:5],flush=True)
 
         # stack halo and field particles
         pos_both = np.vstack((pos_halo, pos_field))
@@ -74,7 +74,7 @@ def load_matter(sim_dir,Lbox,z,n_chunks,N_parts,f_down,type_AB='A'):
         count += len(inds_keep_this)
         del halo_data, pos_halo, vel_halo, field_data, pos_field, vel_field
         gc.collect()
-    print("these two must be the same", count, pos_down.shape[0],flush=True)
+    print("These two must be the same: ",count,pos_down.shape[0],flush=True)
     pos_down = pos_down[:count]
     vel_down = vel_down[:count]
     return pos_down, vel_down
