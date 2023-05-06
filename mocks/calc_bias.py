@@ -155,7 +155,7 @@ if __name__=="__main__":
         kk,pk0,pk2 = np.zeros(1),np.zeros(1),np.zeros(1)
     #
     if False:
-        pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=11,\
+        pk3d  = newBall.compute_Pkmu(mock_dict,nbins_k=50,nbins_mu=3,\
                   k_hMpc_max=0.5,logk=False,num_cells=512,\
                   paste='TSC',compensated=True,interlaced=True)
         mu    = pk3d['mu_binc']
