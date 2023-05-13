@@ -20,7 +20,7 @@ python3 -m pip install --upgrade findiff
 # Install velocileptors. 
 python3 -m pip install git+https://github.com/sfschen/velocileptors
 # and Anzu
-conda install -c conda-forge pyccl chaospy -y
+conda install -c conda-forge chaospy -y
 python3 -m pip install -v git+https://github.com/kokron/anzu
 # and corner for visualizing the MCMC chains:
 python3 -m pip install corner
