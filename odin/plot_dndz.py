@@ -52,7 +52,7 @@ def plot_filter(filt_name,fname="cosmos"):
     # and the analytic fit.
     ax.plot(zarr,fsamp,'-',color='C1',label='Fit')
     # legends and labels.
-    ax.text(zmin+0.01,np.max(fsamp),r'$f_{int}='+'{:.3f}'.format(fint)+'$')
+    ##ax.text(zmin+0.01,np.max(fsamp),r'$f_{int}='+'{:.3f}'.format(fint)+'$')
     ax.legend(title=filt_name)
     ax.set_xlim(zmin,zmax)
     ax.set_xlabel(r'$z$')
@@ -65,6 +65,7 @@ def plot_filter(filt_name,fname="cosmos"):
     #
     plt.tight_layout()
     plt.savefig('odin_'+filt_name+"_dndz.png")
+    plt.savefig('odin_'+filt_name+"_dndz.pdf")
     #
 
 
