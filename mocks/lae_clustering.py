@@ -111,6 +111,7 @@ for lgMcut in lgMc_list:
             zcv_dict = apply_zcv_xi(mock_dict,config,load_presaved=False)
             bb       = zcv_dict['b1'] + 1.0 # Convert to Eulerian bias.
             xiell    = zcv_dict['Xi_tr_tr_ell_zcv']
+            wpR      = np.array([0]) # Placeholder.
             xi0      = xiell[0]
             xi2      = xiell[1]
         else: # Old code.
