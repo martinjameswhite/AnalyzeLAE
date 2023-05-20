@@ -108,7 +108,7 @@ for lgMcut in lgMc_list:
             for k in ['x','y','z','vx','vy','vz','mass','id']:
                 mock_dict['LRG'][k] = mock_dict['LRG'][k][inds]
         if want_zcv:
-            zcv_dict = apply_zcv_xi(mock_dict,config,load_presaved=False)
+            zcv_dict = newBall.apply_zcv_xi(mock_dict,config,load_presaved=False)
             bb       = zcv_dict['b1'] + 1.0 # Convert to Eulerian bias.
             xiell    = zcv_dict['Xi_tr_tr_ell_zcv']
             wpR      = np.array([0]) # Placeholder.
