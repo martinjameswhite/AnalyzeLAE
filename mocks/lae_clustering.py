@@ -122,7 +122,7 @@ for lgMcut in lgMc_list:
             wpR   = xiell[0*len(Rcen):1*len(Rcen)]
             xi0   = xiell[1*len(Rcen):2*len(Rcen)]
             xi2   = xiell[2*len(Rcen):3*len(Rcen)]
-            xi4   = xiell[3*len(Rcen):4*len(Rcen)]
+            xi4   = np.zeros( len(Rcen) )
             bb    = 0.0 # Placeholder.
         #
         dats.append({'hod':hod,'nobj':nobj,'fsat':fsat,'bias':bb,\
