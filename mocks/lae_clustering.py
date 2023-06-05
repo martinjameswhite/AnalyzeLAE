@@ -86,7 +86,7 @@ for lgMcut in lgMc_list:
         if want_zcv:
             # Compute variance reduced spectra.
             zcv_dict = newBall.apply_zcv(mock_dict,config)
-            bb = zcv_dict['b1'] + 1.0 # Convert to Eulerian bias.
+            bb = zcv_dict['bias'][1] + 1.0 # Convert to Eulerian bias.
             kk = zcv_dict['k_binc']
             pkl= zcv_dict['Pk_tr_tr_ell_zcv'] # variance-reduced multipoles
             pk0= pkl[0]
@@ -109,7 +109,7 @@ for lgMcut in lgMc_list:
                 mock_dict['LRG'][k] = mock_dict['LRG'][k][inds]
         if want_zcv:
             zcv_dict = newBall.apply_zcv_xi(mock_dict,config,load_presaved=False)
-            bb       = zcv_dict['b1'] + 1.0 # Convert to Eulerian bias.
+            bb       = zcv_dict['bias'][1] + 1.0 # Convert to Eulerian bias.
             xiell    = zcv_dict['Xi_tr_tr_ell_zcv']
             wpR      = np.array([0]) # Placeholder.
             xi0      = xiell[0]
