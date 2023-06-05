@@ -114,6 +114,7 @@ for lgMcut in lgMc_list:
             wpR      = np.array([0]) # Placeholder.
             xi0      = xiell[0]
             xi2      = xiell[1]
+            xi4      = xiell[2]
         else: # Old code.
             #wpR   = newBall.compute_wp(mock_dict,rpbins,pimax,dpi)['LRG_LRG']
             xiell = newBall.compute_multipole(mock_dict,rpbins,pimax,dpi)
@@ -121,10 +122,12 @@ for lgMcut in lgMc_list:
             wpR   = xiell[0*len(Rcen):1*len(Rcen)]
             xi0   = xiell[1*len(Rcen):2*len(Rcen)]
             xi2   = xiell[2*len(Rcen):3*len(Rcen)]
+            xi4   = xiell[3*len(Rcen):4*len(Rcen)]
             bb    = 0.0 # Placeholder.
         #
         dats.append({'hod':hod,'nobj':nobj,'fsat':fsat,'bias':bb,\
-                     'wp':wpR.tolist(),'xi0':xi0.tolist(),'xi2':xi2.tolist(),\
+                     'wp':wpR.tolist(),\
+                     'xi0':xi0.tolist(),'xi2':xi2.tolist(),'xi4':xi4.tolist(),\
                      'pk0':pk0.tolist(),'pk2':pk2.tolist()})
 # Now write out our answers.
 outdict = {}
