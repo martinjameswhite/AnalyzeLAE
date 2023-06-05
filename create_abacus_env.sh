@@ -21,7 +21,7 @@ python3 -m pip install findiff
 python3 -m pip install git+https://github.com/sfschen/velocileptors
 #
 # Install Abacus
-python3 -m pip install git+https://github.com/abacusorg/abacusutils.git@power_spec
+python3 -m pip install git+https://github.com/abacusorg/abacusutils.git
 ## No longer used: python3 -m pip install abacusutils[zcv]
 #
 # Currently Abacus needs fast-cksum and it isn't included.
