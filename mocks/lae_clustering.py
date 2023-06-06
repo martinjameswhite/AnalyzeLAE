@@ -122,6 +122,9 @@ for lgMcut in lgMc_list:
             wpR   = xiell[0*len(Rcen):1*len(Rcen)]
             xi0   = xiell[1*len(Rcen):2*len(Rcen)]
             xi2   = xiell[2*len(Rcen):3*len(Rcen)]
+            # If change orders=[0,2,4] in call to compute_multipole_fast in
+            # compute_multipole in abacusnbody/hod/abacus_hod.py then can
+            # make xi4 xiell[3*len(Rcen):4*len(Rcen)].
             xi4   = np.zeros( len(Rcen) )
             bb    = 0.0 # Placeholder.
         #
