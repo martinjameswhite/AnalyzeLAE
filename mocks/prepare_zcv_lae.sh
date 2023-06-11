@@ -18,10 +18,8 @@ yaml=./prepare_zcv_lae.yaml
 #python -m abacusnbody.hod.zcv.ic_fields --path2config $yaml
 # Run once per redshift and cosmology.
 #python -m abacusnbody.hod.zcv.zenbu_window --path2config $yaml
+#python -m abacusnbody.hod.zcv.zenbu_window --path2config $yaml --want_xi
 # Run once per simulation and redshift bin.
 #python -m abacusnbody.hod.zcv.advect_fields --path2config $yaml --want_rsd
 #python -m abacusnbody.hod.zcv.advect_fields --path2config $yaml --want_rsd --save_3D_power
-# Run once per simulation and redshift bin (needed even if want_rsd is true).
-#python -m abacusnbody.hod.zcv.advect_fields --path2config $yaml
-#python -m abacusnbody.hod.zcv.advect_fields --path2config $yaml --save_3D_power
 #
