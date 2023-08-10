@@ -11,6 +11,7 @@
 module unload craype-hugepages2M
 #
 source activate abacus
+module load gsl
 #
 date
 srun -n 1 python fake_lae.py
