@@ -4,14 +4,16 @@ import numpy as np
 import yaml
 import json
 
+import asdf
 from abacusnbody.hod.abacus_hod import AbacusHOD
 from abacusnbody.metadata       import get_meta
+
 
 
 # These are the keys we will copy from the simulation meta-data into
 # the output JSON file.
 simkeys = ['n_s', 'omega_b', 'omega_cdm', 'omega_ncdm', 'N_ncdm', 'N_ur',\
-           'H0', 'w0', 'wa', 'w',\
+           'H0', 'w0', 'wa', 'w', \
            'Omega_DE', 'Omega_K', 'Omega_M', 'Omega_Smooth', \
            'Redshift', 'ScaleFactor', \
            'OmegaNow_DE', 'OmegaNow_K', 'OmegaNow_m', \
@@ -19,6 +21,34 @@ simkeys = ['n_s', 'omega_b', 'omega_cdm', 'omega_ncdm', 'N_ncdm', 'N_ur',\
            'SimComment', 'SimName', 'SimSet', \
            'BoxSize', 'NP', 'BoxSizeHMpc', 'HubbleTimeHGyr', \
            'ParticleMassHMsun']
+
+
+
+def get_metadata(simdir,simname,redshift,proxy):
+    """This routine gets the metadata for the simulation.  For simulations
+    in the Abacus database this duplicates the get_meta method, but that
+    database is not updated frequently and for some simulations some keys
+    are missing.
+    Proxy is the name of a simulation with the same cosmology that has all
+    of the keys, used as a work-around for missing data."""
+    # First fill in the "missing" information from the proxy simulation.
+    dd = {}
+    pr = get_meta(proxy,redshift)
+    for k in ['n_s','omega_b','omega_cdm','omega_ncdm',\
+              'N_ncdm','N_ur','SimSet']:
+        dd[k] = pr[k]
+    # Now get the remaining information from the ASDF files directly.
+    fn = simdir+simname+\
+         '/halos/z{:.3f}/halo_info/halo_info_000.asdf'.format(float(redshift))
+    with asdf.open(fn) as af:
+        meta = af['header']
+        for k in simkeys:
+            if k in meta: dd[k] = meta[k]
+    return(dd)
+    #
+
+
+
 #
 # Load the config file and parse in relevant parameters
 path2config= './lae_base.yaml'
@@ -28,7 +58,8 @@ HOD_params = config['HOD_params']
 clustering_params = config['clustering_params']
 #
 # Get the metaparameters for the simulation.
-meta = get_meta(sim_params['sim_name'],redshift=sim_params['z_mock'])
+meta = get_metadata(sim_params['sim_dir'],sim_params['sim_name'],\
+         sim_params['z_mock'],'AbacusSummit_base_c000_ph000')
 #
 # additional parameter choices
 want_rsd      = HOD_params['want_rsd']
@@ -117,15 +148,13 @@ for lgMcut in lgMc_list:
             xi4      = xiell[2]
         else: # Old code.
             #wpR   = newBall.compute_wp(mock_dict,rpbins,pimax,dpi)['LRG_LRG']
-            xiell = newBall.compute_multipole(mock_dict,rpbins,pimax,dpi)
+            xiell = newBall.compute_multipole(mock_dict,rpbins,pimax,\
+                                sbins=Rcen,nbins_mu=11,orders=[0,2,4])
             xiell = xiell['LRG_LRG']
             wpR   = xiell[0*len(Rcen):1*len(Rcen)]
             xi0   = xiell[1*len(Rcen):2*len(Rcen)]
             xi2   = xiell[2*len(Rcen):3*len(Rcen)]
-            # If change orders=[0,2,4] in call to compute_multipole_fast in
-            # compute_multipole in abacusnbody/hod/abacus_hod.py then can
-            # make xi4 xiell[3*len(Rcen):4*len(Rcen)].
-            xi4   = np.zeros( len(Rcen) )
+            xi4   = xiell[3*len(Rcen):4*len(Rcen)]
             bb    = 0.0 # Placeholder.
         #
         dats.append({'hod':hod,'nobj':nobj,'fsat':fsat,'bias':bb,\
