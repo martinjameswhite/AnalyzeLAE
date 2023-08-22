@@ -128,8 +128,8 @@ for lgMcut in lgMc_list:
                      paste='TSC',compensated=True,interlaced=True)
             kk   = pk3d['k_binc']
             pkl  = pk3d['LRG_LRG_ell']
-            pk0  = pkl[0,:]
-            pk2  = pkl[1,:]
+            pk0  = pkl[:,0]
+            pk2  = pkl[:,2]
             bb   = 0.0 # Placeholder.
         #
         if nobj>maxobj:
