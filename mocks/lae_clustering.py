@@ -33,7 +33,7 @@ def get_metadata(simdir,simname,redshift,proxy):
     of the keys, used as a work-around for missing data."""
     # First fill in the "missing" information from the proxy simulation.
     dd = {}
-    pr = get_meta(proxy,redshift)
+    pr = get_meta(proxy,0)
     for k in ['n_s','omega_b','omega_cdm','omega_ncdm',\
               'N_ncdm','N_ur','SimSet']:
         dd[k] = pr[k]
