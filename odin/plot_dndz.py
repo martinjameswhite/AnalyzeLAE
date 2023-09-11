@@ -8,6 +8,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from   astropy.table import Table
+
 
 def plot_filter(filt_name,fname="cosmos"):
     """Make a figure for filter filt_name in field fname."""
@@ -16,14 +18,15 @@ def plot_filter(filt_name,fname="cosmos"):
     # Set the ranges based on the filter.
     if filt_name=="N419": z0,dz,chi0,dcdz = 2.4,0.03,3941.,829.
     ###if filt_name=="N501": z0,dz,chi0,dcdz = 3.1,0.03,4448.,633.
-    if filt_name=="N501": z0,dz,chi0,dcdz = 3.123,0.03,4462.,627.9
+    if filt_name=="N501": z0,dz,chi0,dcdz = 3.1235,0.029,4462.,627.9
     if filt_name=="N673": z0,dz,chi0,dcdz = 4.5,0.04,5160.,411.
     # Set some limits, choosing round numbers.
     zmin  = 1e-2*int( 100*(z0-2*dz)+0 )
     zmax  = 1e-2*int( 100*(z0+2*dz)+1 )
     # Redshifts with VI_QUALITY >= 3 should be considered “good”
-    zvals = np.loadtxt("VI_Redshifts_{:s}.txt".format(filt_name))
-    zvals = zvals[zvals[:,1]>=3,0]
+    tt    = Table.read('FINAL_VI_ODIN_'+filt_name+'.fits')
+    tt    = tt[ tt['VI_QUALITY_FINAL']>=3 ]
+    zvals = tt['VI_Z_FINAL']
     print("Median redshift for ",filt_name," is ",np.median(zvals))
     # Work out the interloper fraction.
     ww   = np.nonzero( (zvals<zmin)|(zvals>zmax) )[0]
