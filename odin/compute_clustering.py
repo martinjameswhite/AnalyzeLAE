@@ -19,17 +19,17 @@ chi_dict['N501'] = 4448.0
 chi_dict['N673'] = 5160.0
 
 fint_dict = {}
-fint_dict['N501'] = {'p0':0.155,'p1':0.019,'p2':0.019,'p3':0.027}
+fint_dict['N501'] = {'s0':0.155,'s1':0.019,'s2':0.019,'s3':0.027}
 
 
 def compute_clustering(filter_name,field_name,selection):
     """Does the work of computing the clustering."""
     fname       = field_name+"_"+filter_name
     chi0        = chi_dict[filter_name]
-    fint        = fint_dict[filter_name]['p'+str(selection)]
+    fint        = fint_dict[filter_name]['s'+str(selection)]
     #
     # Read the targets from file.
-    dat = Table.read('odin_p{:d}_'.format(selection)+fname+'_dat.fits')
+    dat = Table.read('odin_s{:d}_'.format(selection)+fname+'_dat.fits')
     print("Read information for ",len(dat)," data objects from file.")
     #
     ran = Table.read("lae_"+fname+"_ran.fits")
@@ -40,7 +40,7 @@ def compute_clustering(filter_name,field_name,selection):
     rval    = chi0*np.sqrt( bins[:-1]*bins[1:] )*np.pi/180.
     wx     /= (1-fint)**2 # Interloper correction.
     #
-    with open('odin_p{:d}_'.format(selection)+fname+'_wx.txt','w') as outfn:
+    with open('odin_s{:d}_'.format(selection)+fname+'_wx.txt','w') as outfn:
         outfn.write("# Thin-shell angular correlation function.\n")
         outfn.write("# ODIN "+field_name+" "+filter_name+"\n")
         outfn.write("# Selection: "+str(selection)+"\n")
