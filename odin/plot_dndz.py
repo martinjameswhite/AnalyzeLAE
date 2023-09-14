@@ -24,8 +24,8 @@ def plot_filter(filt_name,fname="cosmos"):
     zmin  = 1e-2*int( 100*(z0-2*dz)+0 )
     zmax  = 1e-2*int( 100*(z0+2*dz)+1 )
     # Redshifts with VI_QUALITY >= 3 should be considered “good”
-    tt    = Table.read('FINAL_VI_ODIN_'+filt_name+'.fits')
-    tt    = tt[ tt['VI_QUALITY_FINAL']>=3 ]
+    tt    = Table.read('odin_lae_cosmos_'+filt_name+'.fits')
+    tt    = tt[ tt['VI_QUALITY_FINAL']>=2.5 ]
     zvals = tt['VI_Z_FINAL']
     print("Median redshift for ",filt_name," is ",np.median(zvals))
     # Work out the interloper fraction.
@@ -45,7 +45,7 @@ def plot_filter(filt_name,fname="cosmos"):
             fout.write("{:10.5f} {:12.2f} {:12.6f}\n".\
                        format(zarr[i],carr[i],pchi[i]))
     # Normalize to unit integral for comparison with the normed counts.
-    fsamp = pchi / np.trapz(pchi,x=zarr)
+    fsamp = pchi / np.trapz(pchi,x=zarr) / 1.1
     # Now make the figure.
     fig,ax= plt.subplots(1,1,figsize=(6,3))
     # A (normalized) histogram of the counts.
