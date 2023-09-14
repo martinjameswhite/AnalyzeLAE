@@ -10,8 +10,13 @@ from calc_wR import calc_wt
 
 
 # Put in our fiducial distances and interloper fractions.
+# The distances are from make_table while the interloper
+# fractions are from VI, assuming redshift failures have
+# the same z-distribution as non-failures.
 chi_dict = {}
+chi_dict['N419'] = 3941.0
 chi_dict['N501'] = 4448.0
+chi_dict['N673'] = 5160.0
 
 fint_dict = {}
 fint_dict['N501'] = {'p0':0.155,'p1':0.019,'p2':0.019,'p3':0.027}
