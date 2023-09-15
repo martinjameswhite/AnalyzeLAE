@@ -149,7 +149,7 @@ for lgMcut in lgMc_list:
         else: # Old code.
             #wpR   = newBall.compute_wp(mock_dict,rpbins,pimax,dpi)['LRG_LRG']
             xiell = newBall.compute_multipole(mock_dict,rpbins,pimax,\
-                                sbins=Rcen,nbins_mu=11,orders=[0,2,4])
+                                sbins=rpbins,nbins_mu=11,orders=[0,2,4])
             xiell = xiell['LRG_LRG']
             wpR   = xiell[0*len(Rcen):1*len(Rcen)]
             xi0   = xiell[1*len(Rcen):2*len(Rcen)]
