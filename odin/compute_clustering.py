@@ -19,8 +19,7 @@ chi_dict['N501'] = 4448.0
 chi_dict['N673'] = 5160.0
 
 fint_dict = {}
-fint_dict['N501'] = {'s0':0.155,'s1':0.019,'s2':0.019,'s3':0.027}
-
+fint_dict['N501'] = {'s0':0.094,'s1':0.025,'s2':0.023,'s3':0.032}
 
 def compute_clustering(filter_name,field_name,selection):
     """Does the work of computing the clustering."""
