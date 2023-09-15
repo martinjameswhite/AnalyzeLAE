@@ -8,18 +8,9 @@ from astropy.table import Table
 sys.path.append("../mocks")
 from calc_wR import calc_wt
 
+# Load our fiducial distances and interloper fractions.
+from fiducial import chi_dict,fint_dict
 
-# Put in our fiducial distances and interloper fractions.
-# The distances are from make_table while the interloper
-# fractions are from VI, assuming redshift failures have
-# the same z-distribution as non-failures.
-chi_dict = {}
-chi_dict['N419'] = 3941.0
-chi_dict['N501'] = 4448.0
-chi_dict['N673'] = 5160.0
-
-fint_dict = {}
-fint_dict['N501'] = {'s0':0.094,'s1':0.025,'s2':0.023,'s3':0.032}
 
 def compute_clustering(filter_name,field_name,selection):
     """Does the work of computing the clustering."""
