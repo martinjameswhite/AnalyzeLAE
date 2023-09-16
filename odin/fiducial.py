@@ -15,4 +15,4 @@ chi_dict['N673'] = 5160.0
 
 # Interloper fractions.
 fint_dict = {}
-fint_dict['N501'] = {'s0':0.094,'s1':0.025,'s2':0.023,'s3':0.032}
+fint_dict['N501'] = {'s0':0.1066,'s1':0.0307,'s2':0.0280,'s3':0.0360}
