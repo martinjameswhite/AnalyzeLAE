@@ -17,7 +17,6 @@ def plot_filter(filt_name,fname="cosmos"):
     rng   = np.random.default_rng()
     # Set the ranges based on the filter.
     if filt_name=="N419": z0,dz,chi0,dcdz = 2.4,0.03,3941.,829.
-    ###if filt_name=="N501": z0,dz,chi0,dcdz = 3.1,0.03,4448.,633.
     if filt_name=="N501": z0,dz,chi0,dcdz = 3.1235,0.029,4462.,627.9
     if filt_name=="N673": z0,dz,chi0,dcdz = 4.5,0.04,5160.,411.
     # Set some limits, choosing round numbers.
@@ -25,7 +24,7 @@ def plot_filter(filt_name,fname="cosmos"):
     zmax  = 1e-2*int( 100*(z0+2*dz)+1 )
     # Redshifts with VI_QUALITY >= 3 should be considered “good”
     tt    = Table.read('odin_lae_cosmos_'+filt_name+'.fits')
-    tt    = tt[ tt['VI_QUALITY_FINAL']>=2.5 ]
+    tt    = tt[ tt['VI_QUALITY_FINAL']>=2.0 ]
     zvals = tt['VI_Z_FINAL']
     print("Median redshift for ",filt_name," is ",np.median(zvals))
     # Work out the interloper fraction.
