@@ -37,11 +37,12 @@ def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
     cut[2] degrees of RA/DEC=cut[0]/cut[1] (deg)."""
     # Read RA/DEC from the file, restrict to those with observations
     # in the desired filter and generate a list of Healpix pixel numbers.
-    ran   = Table.read(ran_fname)
-    print(ran.keys())
-    ran   = ran[ ran['MASKBITS']==0 ]
-    ran   = ran[ ran['IN_ARJUN_MASK']==False ]
-    ran   = ran[ ran['NOBS_'+filter_name]>10 ]
+    ran = Table.read(ran_fname)
+    ran = ran[ ran['MASKBITS']==0 ]
+    ran = ran[ ran['IN_ARJUN_MASK']==False ]
+    for band in ["N501","N673"]:
+        ran = ran[ ran['ALLMASK_'+band]==0 ]
+        ran = ran[ ran['NOBS_'+band]>10 ]
     # Apply the circle cut.
     cosmin= np.cos(np.radians(cut[2]))
     theta = np.radians(90-cut[1])
