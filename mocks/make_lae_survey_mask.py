@@ -40,9 +40,11 @@ def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
     ran = Table.read(ran_fname)
     ran = ran[ ran['MASKBITS']==0 ]
     ran = ran[ ran['IN_ARJUN_MASK']==False ]
-    for band in ["N501","N673"]:
+    neededbands = ["N419","N501","N673"]
+    if filter_name=="N501": neededbands = ["N501","N673"]
+    for band in neededbands:
         ran = ran[ ran['ALLMASK_'+band]==0 ]
-        ran = ran[ ran['NOBS_'+band]>10 ]
+        ran = ran[ ran['NOBS_'+band]>=10 ]
     # Apply the circle cut.
     cosmin= np.cos(np.radians(cut[2]))
     theta = np.radians(90-cut[1])
