@@ -98,7 +98,6 @@ class SurveyMask:
         return(len(self.pixs)*apix)
     def weights(self,ras,decs):
         """Returns the weights for the points given by (RA,DEC) in degrees."""
-        # CURRENTLY A STUB.
         if self.wtmask is None:
             wt   = np.ones_like(ras)
         else:
@@ -107,7 +106,12 @@ class SurveyMask:
             tt   = np.radians(90.-decs)
             pp   = np.radians(ras)
             pixs = hp.ang2pix(nside,tt,pp,nest=nest)
-            wt   = np.ones_like(ras)
+            wt   = np.zeros_like(ras)
+            for pixnum,wval in \
+                zip(self.wtmask["HPXPIXEL"],\
+                    self.wtmask["FRACFLUX_N501_FRACSEL"]):
+                k = np.nonzero(pixs==pixnum)[0]
+                if k.size>0: wt[k] = wval
         return(wt)
     def __call__(self,ras,decs):
         """Returns a boolean array of whether the points pass the mask,
