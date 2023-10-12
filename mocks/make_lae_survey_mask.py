@@ -77,17 +77,38 @@ def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
 
 
 
+
+
+
 class SurveyMask:
-    def __init__(self,maskfn):
-        """Reads a FITS file containing an inclusion mask."""
+    def __init__(self,maskfn,wtfn=None):
+        """Reads a FITS file containing an inclusion mask and an
+        optional 'weights' map."""
         mskd       = Table.read(maskfn)
         self.nside = mskd.meta["HPXNSID"]
         self.nest  = mskd.meta["HPXNEST"]
         self.pixs  = mskd["HPXPIXEL"]
+        if wtfn is None:
+            self.wtmask = None
+        else:
+            self.wtmask = Table.read(wtfn)
     def area(self):
         """Returns the in_mask area in deg2."""
         apix = hp.nside2pixarea(self.nside,degrees=True)
         return(len(self.pixs)*apix)
+    def weights(self,ras,decs):
+        """Returns the weights for the points given by (RA,DEC) in degrees."""
+        # CURRENTLY A STUB.
+        if self.wtmask is None:
+            wt   = np.ones_like(ras)
+        else:
+            nside= self.wtmask.meta["HPXNSIDE"]
+            nest = self.wtmask.meta["HPXNEST"]
+            tt   = np.radians(90.-decs)
+            pp   = np.radians(ras)
+            pixs = hp.ang2pix(nside,tt,pp,nest=nest)
+            wt   = np.ones_like(ras)
+        return(wt)
     def __call__(self,ras,decs):
         """Returns a boolean array of whether the points pass the mask,
         with the points given by (RA,DEC) in degrees."""
