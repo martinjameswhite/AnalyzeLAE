@@ -71,7 +71,7 @@ def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
     tt.meta["HPXNEST"] = is_nest
     tt.meta["COMMENT"] = r'Mask lists HPX pixels included in survey'
     # We also want a random file -- this could be downsampled.
-    rr = Table({'RA':ran['RA'][::15],'DEC':ran['DEC'][::15]})
+    rr = Table({'RA':ran['RA'][::10],'DEC':ran['DEC'][::10]})
     return( (tt,rr) )
     #
 
