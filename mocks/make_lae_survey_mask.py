@@ -48,21 +48,35 @@ def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
         # in MASKBITS above.
         # ran = ran[ ran['ALLMASK_'+band]==0 ]
     # Apply the circle cut.
-    cosmin= np.cos(np.radians(cut[2]))
-    theta = np.radians(90-cut[1])
-    phi   = np.radians(cut[0])
-    cnhat = np.array([np.sin(theta)*np.cos(phi),\
-                      np.sin(theta)*np.sin(phi),\
-                      np.cos(theta)])
-    theta = np.radians(90.-ran['DEC'])
-    phi   = np.radians(ran['RA'])
-    nhat  = np.zeros( (theta.size,3) )
-    nhat[:,0] = np.sin(theta)*np.cos(phi)
-    nhat[:,1] = np.sin(theta)*np.sin(phi)
-    nhat[:,2] = np.cos(theta)
-    cdist = np.dot(nhat,cnhat)
-    theta = theta[ cdist>cosmin ]
-    phi   = phi[   cdist>cosmin ]
+    if False:
+        # A proper spherical cap cut centered on,
+        # (cut[0],cut[1]) of radius cut[2] (all in degrees).
+        cosmin= np.cos(np.radians(cut[2]))
+        theta = np.radians(90-cut[1])
+        phi   = np.radians(cut[0])
+        cnhat = np.array([np.sin(theta)*np.cos(phi),\
+                          np.sin(theta)*np.sin(phi),\
+                          np.cos(theta)])
+        theta = np.radians(90.-ran['DEC'])
+        phi   = np.radians(ran['RA'])
+        nhat  = np.zeros( (theta.size,3) )
+        nhat[:,0] = np.sin(theta)*np.cos(phi)
+        nhat[:,1] = np.sin(theta)*np.sin(phi)
+        nhat[:,2] = np.cos(theta)
+        cdist = np.dot(nhat,cnhat)
+        theta = theta[ cdist>cosmin ]
+        phi   = phi[   cdist>cosmin ]
+    else:
+        # Arjun actually applies a simpler "tangent" cut,
+        # so implement that instead.
+        rad2  = (ran['RA' ]-cut[0])**2 +\
+                (ran['DEC']-cut[1])**2
+        theta = np.radians(90.-ran['DEC'])
+        phi   = np.radians(ran['RA'])
+        if cut[2]<179.999:
+            ww    = rad2<cut[2]**2
+            theta = theta[ww]
+            phi   = phi[  ww]
     # and work out the HEALPIX pixel numbers:
     pixs  = hp.ang2pix(nside,theta,phi,nest=is_nest)
     # and generate a table containing the information to be returned.
