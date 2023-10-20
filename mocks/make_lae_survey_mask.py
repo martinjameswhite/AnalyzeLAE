@@ -146,7 +146,7 @@ if __name__=="__main__":
     filter_name = sys.argv[2].upper()
     #
     cut = [0.,0.,180.]
-    if ran_fname.find('cosmos')>0:
+    if ran_fname.find('2band')>0:
         cut = [150.11,2.173,1.9]
     #
     tt,rr = make_survey_mask(ran_fname,filter_name,cut)
