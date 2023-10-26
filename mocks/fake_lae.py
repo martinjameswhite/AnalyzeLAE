@@ -2,11 +2,51 @@
 #
 import numpy as np
 import yaml
+import asdf
 #
 from astropy.table              import Table
 from abacusnbody.hod.abacus_hod import AbacusHOD
 from abacusnbody.metadata       import get_meta
 
+
+
+
+# These are the keys we will copy from the simulation meta-data.
+simkeys = ['n_s', 'omega_b', 'omega_cdm', 'omega_ncdm', 'N_ncdm', 'N_ur',\
+           'H0', 'w0', 'wa', 'w', \
+           'Omega_DE', 'Omega_K', 'Omega_M', 'Omega_Smooth', \
+           'Redshift', 'ScaleFactor', \
+           'OmegaNow_DE', 'OmegaNow_K', 'OmegaNow_m', \
+           'f_growth', 'fsmooth', 'Growth', 'Growth_on_a_n', \
+           'SimComment', 'SimName', 'SimSet', \
+           'BoxSize', 'NP', 'BoxSizeHMpc', 'HubbleTimeHGyr', \
+           'ParticleMassHMsun']
+
+
+
+
+def get_metadata(simdir,simname,redshift,proxy):
+    """This routine gets the metadata for the simulation.  For simulations
+    in the Abacus database this duplicates the get_meta method, but that
+    database is not updated frequently and for some simulations some keys
+    are missing.
+    Proxy is the name of a simulation with the same cosmology that has all
+    of the keys, used as a work-around for missing data."""
+    # First fill in the "missing" information from the proxy simulation.
+    dd = {}
+    pr = get_meta(proxy,redshift)
+    for k in ['n_s','omega_b','omega_cdm','omega_ncdm',\
+              'N_ncdm','N_ur','SimSet']:
+        dd[k] = pr[k]
+    # Now get the remaining information from the ASDF files directly.
+    fn = simdir+simname+\
+         '/halos/z{:.3f}/halo_info/halo_info_000.asdf'.format(float(redshift))
+    with asdf.open(fn) as af:
+        meta = af['header']
+        for k in simkeys:
+            if k in meta: dd[k] = meta[k]
+    return(dd)
+    #
 
 
 class MockLAE:
@@ -24,9 +64,15 @@ class MockLAE:
         self.HOD_params = config['HOD_params']
         self.clustering_params = config['clustering_params']
         #
-        # Get the metaparameters for the simulation.
-        self.meta = get_meta(self.sim_params['sim_name'],\
-                             redshift=self.sim_params['z_mock'])
+        # Get the metaparameters for the simulation -- this is a
+        # workaround for the incomplete database.  It is hardcoded
+        # assuming the cosmology is the same as for AbacusSummit base.
+        self.meta = get_metadata(self.sim_params['sim_dir'],\
+                                 self.sim_params['sim_name'],\
+                                 self.sim_params['z_mock'],\
+                                 'AbacusSummit_base_c000_ph000')
+        #self.meta = get_meta(self.sim_params['sim_name'],\
+        #                     redshift=self.sim_params['z_mock'])
         #
         # additional parameter choices -- we will apply RSD
         # ourselves so override the setting in HOD_params.
