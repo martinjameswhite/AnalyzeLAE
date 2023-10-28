@@ -18,7 +18,8 @@ sim_params:
     cleaned_halos: True       # load cleaned halos?
     
 prepare_sim:
-    Nparallel_load: 16  # number of thread for organizing simulation outputs (prepare_sim)
+    #Nparallel_load: 16  # number of thread for organizing simulation outputs (prepare_sim)
+    Nparallel_load: 1  # for Abacus_DESI2_c000_ph310, due to memory.   
 
 power_params:
     nbins_k: 150
