@@ -5,9 +5,9 @@
 # Simulation parameters
 sim_params:
     #sim_name: 'AbacusSummit_base_c000_ph000'  # which simulation 
-    ##sim_name: 'AbacusSummit_high_c000_ph100' # which simulation 
+    sim_name: 'AbacusSummit_high_c000_ph100' # which simulation 
     ##sim_name:  'Abacus_DESI2_c000_ph300'
-    sim_name: 'Abacus_DESI2_c000_ph310' # which simulation 
+    ##sim_name: 'Abacus_DESI2_c000_ph310' # which simulation 
     #sim_dir:  /global/cfs/cdirs/desi/cosmosim/Abacus/
     #sim_dir:  /global/cfs/cdirs/desi/public/cosmosim/AbacusSummit/
     #sim_dir:  /pscratch/sd/m/mwhite/AnalyzeLAE/mocks/
@@ -18,8 +18,8 @@ sim_params:
     cleaned_halos: True       # load cleaned halos?
     
 prepare_sim:
-    #Nparallel_load: 16  # number of thread for organizing simulation outputs (prepare_sim)
-    Nparallel_load: 1  # for Abacus_DESI2_c000_ph310, due to memory.   
+    Nparallel_load: 16  # number of thread for organizing simulation outputs (prepare_sim)
+    #Nparallel_load: 1  # for Abacus_DESI2_c000_ph310, due to memory.   
 
 power_params:
     nbins_k: 150
