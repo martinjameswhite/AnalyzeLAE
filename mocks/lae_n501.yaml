@@ -39,8 +39,7 @@ zcv_params:
     ic_dir: "/global/cfs/cdirs/desi/public/cosmosim/Abacus/ic/"
     ##cosmo_dir: "/pscratch/sd/m/mwhite/AbacusSummit/Cosmologies/" # Check out from GitHub.
     nmesh: 1152
-    #kcut: 1.8095573684677209 # k_Ny/2
-    kcut: 1.75
+    kcut: 1.8095573684677209 # k_Ny/2 -- must be this!
     fields: ["1cb", "delta", "delta2"]
 
 
