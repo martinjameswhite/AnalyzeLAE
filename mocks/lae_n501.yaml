@@ -26,6 +26,7 @@ power_params:
     nbins_mu: 1
     poles: [0, 2, 4]
     k_hMpc_max: 1.5
+    #k_hMpc_max: 1.8095573684677209 # k_Ny/2 -- must be this for ZCV!
     paste: 'TSC'
     compensated: True
     interlaced: True
