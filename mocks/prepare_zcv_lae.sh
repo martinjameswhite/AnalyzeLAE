@@ -8,6 +8,9 @@
 #SBATCH -C cpu
 #SBATCH -A m68
 #
+module load python
+module use /global/common/software/nersc/user/gsl-temp-modulefile
+module load gsl
 source activate abacus
 #
 # This code uses abacusnbody.hod.zcv
