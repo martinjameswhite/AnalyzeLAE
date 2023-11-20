@@ -90,7 +90,8 @@ if __name__=="__main__":
     rng = np.random.default_rng(1)
     #
     # Load the config file and parse in relevant parameters
-    path2config= './lae_n501.yaml'
+    fbase      = "lae_n501"
+    path2config= './'+fbase+'.yaml'
     config     = yaml.safe_load(open(path2config))
     sim_params = config['sim_params']
     HOD_params = config['HOD_params']
@@ -119,8 +120,8 @@ if __name__=="__main__":
     # with the sqrt{2}.
     # Satellite numbers are ncen times ([M-kappa.Mcut]/M1)^alpha
     #
-    params = {'logM_cut':11.80,'logM1':11.80+np.log10(5.),\
-              'sigma':0.66,'kappa':0.33,'alpha':0.50}
+    params = {'logM_cut':11.00,'logM1':12.30,\
+              'sigma':0.66,'kappa':1.00,'alpha':0.33}
     #
     hodkeys = ['logM_cut','logM1','sigma','kappa','alpha']
     for k in hodkeys:
@@ -168,7 +169,7 @@ if __name__=="__main__":
         bka   = np.sqrt(pkgg/pkmm)
         bkx   = pkgm/pkmm
         #
-        with open("lae_bk.txt","w") as fout:
+        with open(fbase+"_bk.txt","w") as fout:
             fout.write("# Real-space Fourier biases.\n")
             fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
@@ -207,7 +208,7 @@ if __name__=="__main__":
         bra  = np.sqrt(xigg/ximm)
         brx  = xigm/ximm
         #
-        with open("lae_br.txt","w") as fout:
+        with open(fbase+"_br.txt","w") as fout:
             fout.write("# Real-space configuration biases.\n")
             fout.write("# "+sim_params['sim_name']+"\n")
             fout.write("# z={:.2f}\n".format(sim_params['z_mock']))
