@@ -16,16 +16,17 @@ def plot_filter(filt_name,fname="cosmos"):
     # We will need a random number generator.
     rng   = np.random.default_rng()
     # Set the ranges based on the filter.
-    if filt_name=="N419": z0,dz,chi0,dcdz = 2.4,0.03,3941.,829.
-    if filt_name=="N501": z0,dz,chi0,dcdz = 3.1235,0.029,4462.,627.9
-    if filt_name=="N673": z0,dz,chi0,dcdz = 4.5,0.04,5160.,411.
+    if filt_name=="N419": z0,dz,zl,chi0,dcdz = 2.4,0.03,0.0,3941.,829.
+    if filt_name=="N501": z0,dz,zl,chi0,dcdz = 3.1235,0.029,2.0,4462.,627.9
+    if filt_name=="N673": z0,dz,zl,chi0,dcdz = 4.5,0.04,0.0,5160.,411.
     # Set some limits, choosing round numbers.
     zmin  = 1e-2*int( 100*(z0-2*dz)+0 )
     zmax  = 1e-2*int( 100*(z0+2*dz)+1 )
-    # Redshifts with VI_QUALITY >= 3 should be considered “good”
-    tt    = Table.read('odin_lae_cosmos_'+filt_name+'.fits')
-    tt    = tt[ tt['VI_QUALITY_FINAL']>=2.0 ]
-    zvals = tt['VI_Z_FINAL']
+    # Redshifts with VI_QUALITY >= 2 should be considered “good”
+    db    = "/global/cfs/cdirs/desi/users/raichoor/laelbg/odin/phot/"
+    tt    = Table.read(db+'odin-'+filt_name+'-'+fname+'-for-angclust.fits')
+    tt    = tt[ tt['VI_QUALITY']>=2.0 ]
+    zvals = tt['VI_Z']
     print("Median redshift for ",filt_name," is ",np.median(zvals))
     # Work out the interloper fraction.
     ww   = np.nonzero( (zvals<zmin)|(zvals>zmax) )[0]
@@ -34,7 +35,7 @@ def plot_filter(filt_name,fname="cosmos"):
     # Fit to dN/dz histogram.
     zarr = np.arange(zmin,zmax,0.0025)
     carr = chi0+dcdz*(zarr-z0)
-    pchi = np.exp(-np.abs( (zarr-z0)/(dz) )**6 )
+    pchi = np.exp(-np.abs( (zarr-z0)/(dz) )**6 ) * (1-zl*(zarr-z0))
     # Write the selection function to file.
     with open("lae_"+fname+"_"+filt_name+"_sfn.txt","w") as fout:
         fout.write("# Radial selection function.\n")
@@ -44,7 +45,7 @@ def plot_filter(filt_name,fname="cosmos"):
             fout.write("{:10.5f} {:12.2f} {:12.6f}\n".\
                        format(zarr[i],carr[i],pchi[i]))
     # Normalize to unit integral for comparison with the normed counts.
-    fsamp = pchi / np.trapz(pchi,x=zarr) / 1.1
+    fsamp = pchi / np.trapz(pchi,x=zarr)
     # Now make the figure.
     fig,ax= plt.subplots(1,1,figsize=(6,3))
     # A (normalized) histogram of the counts.
