@@ -105,7 +105,7 @@ if __name__=="__main__":
         fout.write("# Field "+fname+"\n")
         fout.write("# Centered on ({:.3f},{:.3f})\n".format(cra,cdc))
         fout.write("# Number density is {:.3e}\n".format(laes.d['nbar']))
-        fout.write("# Sampling by {:.3f} to get {:.1f} LAEs/deg2\n".\
+        fout.write("# Sampling by {:.4f} to get {:.1f} LAEs/deg2\n".\
                    format(fsamp,ntarget))
         fout.write("# Have {:.1f}+/-{:.2f} LAEs/field.\n".\
                    format(navg,nerr))
