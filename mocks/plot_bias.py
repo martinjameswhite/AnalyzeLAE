@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 def make_plot():
     """Does the work."""
     # Load the data.
-    bk = np.loadtxt("lae_bk.txt")
-    br = np.loadtxt("lae_br.txt")
+    bk = np.loadtxt("lae_n501_bk.txt")
+    br = np.loadtxt("lae_n501_br.txt")
     # Make the figure.
     fig,ax = plt.subplots(1,2,sharey=True,figsize=(6,2.50))
     # First do b(k).
