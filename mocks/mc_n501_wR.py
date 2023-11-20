@@ -36,8 +36,8 @@ if __name__=="__main__":
     print("Random size ",len(ran['RA']),flush=True)
     # Define the mock catalog, shell and HOD.
     laes   = MockLAE('lae_n501.yaml',4448.,sfn)
-    params = {'logM_cut':11.00,'logM1':11.70,\
-              'sigma':0.50,'kappa':0.50,'alpha':0.50}
+    params = {'logM_cut':10.80,'logM1':11.50,\
+              'sigma':0.50,'kappa':1.00,'alpha':0.50}
     laes.set_hod(params)
     laes.generate()
     laes.assign_lum(0.25)
