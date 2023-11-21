@@ -75,3 +75,4 @@ def plot_filter(filt_name,fname="cosmos"):
 if __name__=="__main__":
     for filt in ["N501"]:
         plot_filter(filt)
+    print("Should copy sfn files to ../mocks.")
