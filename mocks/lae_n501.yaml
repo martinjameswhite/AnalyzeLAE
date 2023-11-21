@@ -10,8 +10,8 @@ sim_params:
     ##sim_name: 'Abacus_DESI2_c000_ph310' # which simulation 
     #sim_dir:  /global/cfs/cdirs/desi/cosmosim/Abacus/
     #sim_dir:  /global/cfs/cdirs/desi/public/cosmosim/AbacusSummit/
-    #sim_dir:  /pscratch/sd/m/mwhite/AnalyzeLAE/mocks/
-    sim_dir:  /global/cfs/cdirs/desi/cosmosim/Abacus/
+    sim_dir:  /pscratch/sd/m/mwhite/AnalyzeLAE/mocks/
+    #sim_dir:  /global/cfs/cdirs/desi/cosmosim/Abacus/
     output_dir: './'          # where to output galaxy mocks, need trailing slash.
     subsample_dir: './'       # where to output subsample data, need trailing slash.
     z_mock: 3.0               # which redshift slice
