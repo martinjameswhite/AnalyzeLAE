@@ -162,10 +162,12 @@ if __name__=="__main__":
         pk3d  = newBall.compute_power(mock_dict,nbins_k=50,nbins_mu=3,\
                   k_hMpc_max=0.5,logk=False,poles=[0],num_cells=512,\
                   paste='TSC',compensated=True,interlaced=True)
+        print("pk3d[LRGLRG].shape=",pk3d['LRG_LRG_ell'].shape,flush=True)
+        print("pk3d[LRGLRG]=",pk3d['LRG_LRG_ell'],flush=True)
         kk    = pk3d['k_binc']
-        pkgg  = pk3d['LRG_LRG_ell'][0,:,0]
-        pkgm  = pk3d['LRG_matter_ell'][0,:,0]
-        pkmm  = pk3d['matter_matter_ell'][0,:,0]
+        pkgg  = pk3d['LRG_LRG_ell'][:,0]
+        pkgm  = pk3d['LRG_matter_ell'][:,0]
+        pkmm  = pk3d['matter_matter_ell'][:,0]
         bka   = np.sqrt(pkgg/pkmm)
         bkx   = pkgm/pkmm
         #
