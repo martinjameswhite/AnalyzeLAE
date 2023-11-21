@@ -10,6 +10,8 @@
 #
 date
 #
+module use /global/common/software/nersc/user/gsl-temp-modulefile
+module load gsl
 source activate abacus
 #
 export OMP_NUM_THREADS=64
