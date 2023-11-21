@@ -38,6 +38,8 @@ if __name__=="__main__":
     laes   = MockLAE('lae_n501.yaml',4448.,sfn)
     params = {'logM_cut':10.80,'logM1':11.50,\
               'sigma':0.50,'kappa':1.00,'alpha':0.50}
+    params = {'logM_cut':11.00,'logM1':12.30,\
+              'sigma':0.66,'kappa':1.00,'alpha':0.33}
     laes.set_hod(params)
     laes.generate()
     laes.assign_lum(0.25)
