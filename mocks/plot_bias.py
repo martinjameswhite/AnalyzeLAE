@@ -22,7 +22,7 @@ def make_plot():
     ax[0].axhline(2.0,ls=':',color='k')
     ax[0].legend(loc=2)
     ax[0].set_xlim(0.0,0.5)
-    ax[0].set_ylim(1.0,2.5)
+    ax[0].set_ylim(1.5,2.5)
     ax[0].set_xlabel(r'$k\quad [h\,{\rm Mpc}^{-1}]$')
     ax[0].set_ylabel(r'Bias')
     # then do b(r)
@@ -32,7 +32,7 @@ def make_plot():
     ax[1].legend(loc=1)
     ax[1].set_xlim(0.5,25)
     ax[1].set_xscale('log')
-    ax[1].set_ylim(1.0,2.5)
+    ax[1].set_ylim(1.5,2.5)
     ax[1].set_xlabel(r'$r\quad [h^{-1}\,{\rm Mpc}]$')
     #
     plt.tight_layout()
