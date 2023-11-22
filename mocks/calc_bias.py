@@ -200,7 +200,8 @@ if __name__=="__main__":
             for k in ['x','y','z']:
                 mock_dict[samp][k] = mock_dict[samp][k][inds]
             ndm = maxobj
-        xi3d = newBall.compute_multipole(mock_dict,rpbins,pimax,dpi)
+        xi3d = newBall.compute_multipole(mock_dict,rpbins,\
+                                         pimax,sbins=rpbins,nbins_mu=3)
         xiell= xi3d['LRG_LRG']
         xigg = xiell[1*len(Rcen):2*len(Rcen)]
         xiell= xi3d['LRG_matter']
