@@ -19,7 +19,7 @@ def make_plot():
     # First do b(k).
     ax[0].plot(bk[1:,0],bk[1:,1],'d',color='C0',mfc='None',label='$b_a$')
     ax[0].plot(bk[1:,0],bk[1:,2],'s',color='C1',mfc='None',label=r'$b_\times$')
-    ax[0].axhline(2.0,ls=':',color='k')
+    ax[0].axhline(2.05,ls=':',color='k')
     ax[0].legend(loc=2)
     ax[0].set_xlim(0.0,0.5)
     ax[0].set_ylim(1.9,2.4)
@@ -28,7 +28,7 @@ def make_plot():
     # then do b(r)
     ax[1].plot(br[:,0],br[:,1],'d',color='C0',mfc='None',label='$b_a$')
     ax[1].plot(br[:,0],br[:,2],'s',color='C1',mfc='None',label=r'$b_\times$')
-    ax[1].axhline(2.0,ls=':',color='k')
+    ax[1].axhline(2.03,ls=':',color='k')
     ax[1].legend(loc=1)
     ax[1].set_xlim(0.5,25)
     ax[1].set_xscale('log')
