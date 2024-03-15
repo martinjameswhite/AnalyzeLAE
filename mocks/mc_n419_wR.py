@@ -35,7 +35,7 @@ if __name__=="__main__":
     ran['DEC'] = tt['DEC'][ww]
     print("Random size ",len(ran['RA']),flush=True)
     # Define the mock catalog, shell and HOD.
-    laes   = MockLAE('lae_n419.yaml',3979.,sfn)
+    laes   = MockLAE('lae_n419.yaml',3941.,sfn)
     params = {'logM_cut':11.75,'logM1':11.75+np.log10(5.),\
               'sigma':0.50,'kappa':0.33,'alpha':0.50}
     laes.set_hod(params)
