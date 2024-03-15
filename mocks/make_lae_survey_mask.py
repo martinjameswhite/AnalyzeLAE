@@ -41,6 +41,7 @@ def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
     ran = ran[ ran['MASKBITS']==0 ]
     ran = ran[ ran['IN_ARJUN_MASK']==False ]
     neededbands = ["N419","N501","N673"]
+    if filter_name=="N419": neededbands = ["N419","N501"]
     if filter_name=="N501": neededbands = ["N501","N673"]
     for band in neededbands:
         ran = ran[ ran['NOBS_'+band]>=10 ]
@@ -147,6 +148,8 @@ if __name__=="__main__":
     #
     cut = [0.,0.,180.]
     if ran_fname.find('2band')>0:
+        cut = [150.11,2.173,1.9]
+    if ran_fname.find('cosmos')>0:
         cut = [150.11,2.173,1.9]
     #
     tt,rr = make_survey_mask(ran_fname,filter_name,cut)

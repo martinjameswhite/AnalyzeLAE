@@ -11,10 +11,13 @@
 source activate cmb
 #
 db=/global/cfs/cdirs/desi/users/adamyers/ODIN
-fn=randoms-ODIN-cosmos-1.fits
+# For the N501 sample:
 fn=randoms-ODIN-2band-1.fits
+# For the N419 sample:
+fn=randoms-ODIN-cosmos-1.fits
 #
 filter=N501
+filter=N419
 #
 export OMP_NUM_THREADS=32
 #
