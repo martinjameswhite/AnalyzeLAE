@@ -18,8 +18,6 @@ if __name__=="__main__":
     # Set up a random number generator with a
     # fixed seed for reproducability.
     rng    = np.random.default_rng(1)
-    # Set the name of the field we'll work with.
-    fname= "cosmos_N501"
     # Define the mock catalog and HOD.
     # For the LRG HOD sigma is defined with natural logs,
     # with the sqrt{2}.
