@@ -182,10 +182,11 @@ if __name__=="__main__":
                 fout.write("{:12.4e} {:15.5e} {:15.5e} {:15.5e}\n".\
                         format(kk[i],bka[i],bkx[i],pkmm[i]))
     #
-    if False:
+    if True:
         # This is very slow if there are many objects and
         # the maximum lag is too large.
         maxobj  = 8000000 # Should be an integer.
+        maxobj  =16000000
         if nobj>maxobj:
             print("Have nobj=",nobj," downsampling to ",maxobj,flush=True)
             inds = rng.choice(nobj,size=maxobj,replace=False)
