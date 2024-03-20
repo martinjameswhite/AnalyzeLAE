@@ -203,13 +203,14 @@ icol   = 0
 for ifilt in flist:
     binned_ells = tt[ifilt]['binned_ells']
     hdif_normed = tt[ifilt]['hdif_normed']
-    ax.plot(binned_ells,1e6*hdif_normed,'o:',color='C'+str(icol),label=ifilt)
+    ax.plot(binned_ells,1e6*hdif_normed,'o:',\
+            color='C'+str(icol),mfc='None',label=ifilt)
     ax.axhline(1.5,color='C'+str(icol),ls=':')
     icol = (icol+1)%10
 #
 mc = np.loadtxt("mc_cosmos_N501_cl.txt")
 ax.errorbar(mc[:,0],1e6*mc[:,1],yerr=1e6*mc[:,2],\
-            fmt='s',color='C0',label='Mock')
+            fmt='s',color='C0',mfc='None',label='Mock')
 #
 ax.legend()
 ax.set_xlim(300,1700)
