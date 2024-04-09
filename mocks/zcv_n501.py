@@ -54,6 +54,16 @@ if __name__=="__main__":
     fsat  = 1-float(ncen)/float(nobj)
     print("nobj=",nobj,", ncen=",ncen,", fsat=",fsat,flush=True)
     #
+    # Do a histogram of the host halo masses.
+    y,x = np.histogram(np.log10(mock_dict['LRG']['mass']+1e-10),\
+                       bins=np.arange(9.5,15.01,0.1))
+    x = 0.5*(x[:-1]+x[1:])
+    with open("zcv_n501_lgMh_hist.txt","w") as fout:
+        fout.write("# Histogram of host halo masses.\n")
+        fout.write("# {:>8s} {:>15s}\n".format("lgMh","Number"))
+        for i in range(y.size):
+            fout.write("{:10.3f} {:15.5e}\n".format(x[i],y[i]))
+    #
     if want_zcv:
         # Compute variance reduced spectra.
         zcv_dict = newBall.apply_zcv(mock_dict,config)
