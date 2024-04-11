@@ -10,9 +10,8 @@
 #
 date
 #
-module use /global/common/software/nersc/user/gsl-temp-modulefile
-module load gsl
-source activate abacus
+module load python
+conda  activate abacus
 #
 export OMP_NUM_THREADS=64
 srun -n 1 -c ${OMP_NUM_THREADS} python compute_clustering.py
