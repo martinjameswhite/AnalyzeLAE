@@ -44,6 +44,6 @@ def compute_clustering(filter_name,field_name,selection):
 
 if __name__=="__main__":
     field = "cosmos"
-    for filter in ["N501"]:
+    for filter in ["N419"]:
         for selection in [3]:
             compute_clustering(filter,field,selection)
