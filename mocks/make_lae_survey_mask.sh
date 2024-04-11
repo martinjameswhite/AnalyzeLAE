@@ -8,7 +8,8 @@
 #SBATCH -C cpu
 #SBATCH -A m68
 #
-source activate cmb
+module load python
+conda activate cmb
 #
 db=/global/cfs/cdirs/desi/users/adamyers/ODIN
 # For the N501 sample:
