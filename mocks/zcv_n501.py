@@ -56,7 +56,7 @@ if __name__=="__main__":
     #
     # Do a histogram of the host halo masses.
     y,x = np.histogram(np.log10(mock_dict['LRG']['mass']+1e-10),\
-                       bins=np.arange(9.5,15.01,0.1))
+                       bins=np.arange(9.5,15.01,0.05))
     x = 0.5*(x[:-1]+x[1:])
     with open("zcv_n501_lgMh_hist.txt","w") as fout:
         fout.write("# Histogram of host halo masses.\n")
