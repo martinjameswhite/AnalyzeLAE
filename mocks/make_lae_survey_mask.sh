@@ -15,7 +15,9 @@ db=/global/cfs/cdirs/desi/users/adamyers/ODIN
 # For the N501 sample:
 fn=randoms-ODIN-2band-1.fits
 # For the N419 sample:
-fn=randoms-ODIN-cosmos-1.fits
+#fn=randoms-ODIN-cosmos-1.fits
+db=.
+fn=cosmos_HSC_randoms.fits
 #
 filter=N501
 filter=N419
