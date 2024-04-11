@@ -36,8 +36,8 @@ if __name__=="__main__":
     print("Random size ",len(ran['RA']),flush=True)
     # Define the mock catalog, shell and HOD.
     laes   = MockLAE('lae_n419.yaml',3941.,sfn)
-    params = {'logM_cut':11.30,'logM1':12.30,\
-              'sigma':0.66,'kappa':0.33,'alpha':0.50}
+    params = {'logM_cut':11.10,'logM1':11.80,\
+              'sigma':0.66,'kappa':0.33,'alpha':0.66}
     laes.set_hod(params)
     laes.generate()
     laes.assign_lum(0.25)
@@ -54,7 +54,7 @@ if __name__=="__main__":
     print("Raw 3D number density ",laes.d['nbar'],flush=True)
     # Now we want to determine the sampling fraction to
     # get the right angular number density.
-    ntarget,nbar = 275.*(1.-0.02),[]
+    ntarget,nbar = 267.1*(1.-0.0276),[]
     for i in range(25):
         # Generate the galaxies.
         offset = rng.uniform(low=-0.5,high=0.5,size=3)
