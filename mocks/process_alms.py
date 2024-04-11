@@ -22,7 +22,7 @@ sys.path.append('/pscratch/sd/m/mwhite/direct_sht/csht/')
 from mask_deconvolution import MaskDeconvolution
 
 # Set up the list of filters and samples to process.
-flist,slist = ["N501"],["s3"]
+flist,slist = ["N419","N501"],["s3","s3"]
 
 #
 # Load the pre-computed alms.
