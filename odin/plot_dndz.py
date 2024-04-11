@@ -16,7 +16,7 @@ def plot_filter(filt_name,fname="cosmos"):
     # We will need a random number generator.
     rng   = np.random.default_rng()
     # Set the ranges based on the filter.
-    if filt_name=="N419": z0,dz,zl,chi0,dcdz = 2.4,0.03,0.0,3941.,829.
+    if filt_name=="N419": z0,dz,zl,chi0,dcdz = 2.449,0.029,0.0,3941.,829.
     if filt_name=="N501": z0,dz,zl,chi0,dcdz = 3.1235,0.029,2.0,4462.,627.9
     if filt_name=="N673": z0,dz,zl,chi0,dcdz = 4.5,0.04,0.0,5160.,411.
     # Set some limits, choosing round numbers.
@@ -24,7 +24,9 @@ def plot_filter(filt_name,fname="cosmos"):
     zmax  = 1e-2*int( 100*(z0+2*dz)+1 )
     # Redshifts with VI_QUALITY >= 2 should be considered “good”
     db    = "/global/cfs/cdirs/desi/users/raichoor/laelbg/odin/phot/"
-    tt    = Table.read(db+'odin-'+filt_name+'-'+fname+'-for-angclust.fits')
+    db    = "/global/cfs/cdirs/desi/users/raichoor/tmpdir/"
+    ##tt    = Table.read(db+'odin-'+filt_name+'-'+fname+'-for-angclust.fits')
+    tt    = Table.read(db+'odin-'+filt_name+'-'+fname+'-for-angclust-v0.fits')
     tt    = tt[ tt['VI_QUALITY']>=2.0 ]
     zvals = tt['VI_Z']
     print("Median redshift for ",filt_name," is ",np.median(zvals))
@@ -73,6 +75,6 @@ def plot_filter(filt_name,fname="cosmos"):
 
 
 if __name__=="__main__":
-    for filt in ["N501"]:
+    for filt in ["N419"]:
         plot_filter(filt)
     print("Should copy sfn files to ../mocks.")
