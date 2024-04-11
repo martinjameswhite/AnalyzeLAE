@@ -25,6 +25,7 @@ import os
 
 
 from   astropy.table import Table
+from   get_brns      import get_bb_brns
 
 
 
@@ -48,6 +49,10 @@ def make_survey_mask(ran_fname,filter_name,cut,nside=8192,is_nest=True):
         # Now longer need ALLMASK_*, as this is included
         # in MASKBITS above.
         # ran = ran[ ran['ALLMASK_'+band]==0 ]
+    if filter_name=="N419":
+        # Additionally filter to selected brick names.
+        brns= get_bb_brns("LS")
+        ran = ran[np.in1d(ran["BRICKNAME"],brns)]
     # Apply the circle cut.
     if False:
         # A proper spherical cap cut centered on,
