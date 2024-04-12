@@ -22,7 +22,7 @@ def make_plot(filter_name):
     bk = np.loadtxt("lae_"+filter_name.lower()+"_bk.txt")
     br = np.loadtxt("lae_"+filter_name.lower()+"_br.txt")
     # Make the figure.
-    fig,ax = plt.subplots(1,2,sharey=True,figsize=(6,2.50))
+    fig,ax = plt.subplots(1,2,sharey=True,figsize=(9,3))
     # First do b(k).
     ax[0].plot(bk[1:,0],bk[1:,1],'d',color='C0',mfc='None',label='$b_a$')
     ax[0].plot(bk[1:,0],bk[1:,2],'s',color='C1',mfc='None',label=r'$b_\times$')
