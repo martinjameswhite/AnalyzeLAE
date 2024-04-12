@@ -24,9 +24,7 @@ def plot_filter(filt_name,fname="cosmos"):
     zmax  = 1e-2*int( 100*(z0+2*dz)+1 )
     # Redshifts with VI_QUALITY >= 2 should be considered “good”
     db    = "/global/cfs/cdirs/desi/users/raichoor/laelbg/odin/phot/"
-    db    = "/global/cfs/cdirs/desi/users/raichoor/tmpdir/"
-    ##tt    = Table.read(db+'odin-'+filt_name+'-'+fname+'-for-angclust.fits')
-    tt    = Table.read(db+'odin-'+filt_name+'-'+fname+'-for-angclust-v0.fits')
+    tt    = Table.read(db+'odin-'+filt_name+'-'+fname+'-for-angclust.fits')
     tt    = tt[ tt['VI_QUALITY']>=2.0 ]
     zvals = tt['VI_Z']
     print("Median redshift for ",filt_name," is ",np.median(zvals))
@@ -47,7 +45,12 @@ def plot_filter(filt_name,fname="cosmos"):
             fout.write("{:10.5f} {:12.2f} {:12.6f}\n".\
                        format(zarr[i],carr[i],pchi[i]))
     # Normalize to unit integral for comparison with the normed counts.
-    fsamp = pchi / np.trapz(pchi,x=zarr)
+    fsamp= pchi / np.trapz(pchi,x=zarr)
+    # Read the filter curves.
+    db   = "/global/cfs/cdirs/desi/users/raichoor/laelbg/odin/filt/"
+    filt = np.loadtxt(db+filt_name+"_simulated_total_transmission_f3.6.txt")
+    filt[:,0] = filt[:,0]/121.6-1 # Convert lambda->z.
+    filt[:,1]/= np.trapz(filt[:,1],x=filt[:,0]) # Normalize.
     # Now make the figure.
     fig,ax= plt.subplots(1,1,figsize=(6,3))
     # A (normalized) histogram of the counts.
@@ -56,6 +59,8 @@ def plot_filter(filt_name,fname="cosmos"):
     ax.hist(zvals,bins=bins,density=True,color='C0',label='VI')
     # and the analytic fit.
     ax.plot(zarr,fsamp,'-',color='C1',label='Fit')
+    # and the filter transmission curve
+    ax.plot(filt[:,0],filt[:,1],color='C2',label='Filter')
     # legends and labels.
     ##ax.text(zmin+0.01,np.max(fsamp),r'$f_{int}='+'{:.3f}'.format(fint)+'$')
     ax.legend(title=filt_name)
@@ -75,6 +80,6 @@ def plot_filter(filt_name,fname="cosmos"):
 
 
 if __name__=="__main__":
-    for filt in ["N419"]:
+    for filt in ["N501"]:
         plot_filter(filt)
     print("Should copy sfn files to ../mocks.")
