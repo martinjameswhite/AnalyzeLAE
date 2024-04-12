@@ -83,7 +83,7 @@ if __name__=="__main__":
     print(time.asctime(),flush=True)
     # Now we want to determine the sampling fraction to
     # get the right angular number density.
-    ntarget,nbar = 209.3,[]
+    ntarget,nbar = 209.3*(1.-0.08),[]
     for i in range(25):
         # Generate the galaxies.
         offset = rng.uniform(low=-0.5,high=0.5,size=3)
