@@ -16,7 +16,7 @@ def make_xir_plot(filt_name,zeff):
     xigg = br[:,1]**2 * ximm
     xigm = br[:,2]    * ximm
     # Make the figure.
-    fig,ax = plt.subplots(1,1,figsize=(6,3.25))
+    fig,ax = plt.subplots(1,1,figsize=(4.5,3))
     #
     ax.plot(br[:,0],xigg,'d',color='C0',mfc='None',label=r'$\xi_{gg}$')
     ax.plot(br[:,0],xigm,'s',color='C1',mfc='None',label=r'$\xi_{gm}$')
@@ -46,7 +46,7 @@ def make_pkr_plot(filt_name,zeff):
     Pgg = bk[:,1]**2 * Pmm
     Pgm = bk[:,2]    * Pmm
     # Make the figure.
-    fig,ax = plt.subplots(1,1,figsize=(6,3.25))
+    fig,ax = plt.subplots(1,1,figsize=(4.5,3))
     #
     ax.plot(bk[:,0],Pgg,'d',color='C0',mfc='None',label=r'$P_{gg}$')
     ax.plot(bk[:,0],Pgm,'s',color='C1',mfc='None',label=r'$P_{gm}$')
@@ -68,6 +68,6 @@ def make_pkr_plot(filt_name,zeff):
 
 
 if __name__=="__main__":
-    for filt_name,zeff in zip(["n501"],[3.1]):
+    for filt_name,zeff in zip(["n419","n501"],[2.4,3.1]):
         make_xir_plot(filt_name,zeff)
         make_pkr_plot(filt_name,zeff)
