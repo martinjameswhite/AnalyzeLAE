@@ -38,8 +38,8 @@ if __name__=="__main__":
     dbase   = "/global/cfs/cdirs/desi/users/adamyers/ODIN/"
     ranfile = "randoms-ODIN-cosmos-1.fits"
     for imaging in ["LS","HSC"]:
-        mskfile = "/global/cfs/cdirs/desi/users/raichoor/tmpdir/"
-        mskfile+= "odin-cosmos-bb-hpmap-nside8192-"+imaging+".fits"
+        mskfile = "/global/cfs/cdirs/desi/users/raichoor/laelbg/odin/phot/"
+        mskfile+= "odin-N419-cosmos-angfoot-"+imaging+".fits"
         outfile = "cosmos_"+imaging+"_randoms.fits"
         filter_randoms(dbase,ranfile,mskfile,outfile)
         #
