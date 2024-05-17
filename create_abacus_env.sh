@@ -2,7 +2,7 @@
 # 
 conda create --name abacus --clone lazy-mpi4py
 #
-source activate abacus
+conda activate abacus
 # Install some basic stuff
 conda install numpy scipy sympy matplotlib astropy pandas cython -y
 conda install -c conda-forge healpy -y
