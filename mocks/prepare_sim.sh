@@ -15,6 +15,8 @@ source activate abacus
 # You should modify the prepare_sim code so that the "MT" else
 # condition in subsample_halos has e.g.:
 #        downfactors[x > 10.5] = 1
+# You may also want/need to modify the cutoff in the
+# "submask_particles" subroutine.
 #
 python -m abacusnbody.hod.prepare_sim \
   --path2config ./lae_base.yaml --alt_simname AbacusSummit_high_c000_ph100
