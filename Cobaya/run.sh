@@ -8,7 +8,7 @@
 #SBATCH -C cpu
 #SBATCH -A m68
 #
-source activate cobaya
+conda activate cobaya
 #
 export PYTHONPATH=${PYTHONPATH}:$PWD/lss_likelihood
 export OMP_NUM_THREADS=2
