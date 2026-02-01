@@ -8,7 +8,7 @@
 #SBATCH -C cpu
 #SBATCH -A m68
 #
-source activate abacus
+conda activate abacus
 #
 # This code uses abacusnbody.hod.prepare_sim, but this itself has
 # subsampling hard-coded that is not appropriate for LBGs or LAEs.
